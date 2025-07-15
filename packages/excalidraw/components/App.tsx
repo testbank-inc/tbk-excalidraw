@@ -385,6 +385,7 @@ import { LaserTrails } from "../laser-trails";
 import { withBatchedUpdates, withBatchedUpdatesThrottled } from "../reactUtils";
 import { textWysiwyg } from "../wysiwyg/textWysiwyg";
 import { isOverScrollBars } from "../scene/scrollbars";
+import { constrainScrollToPageBounds } from "../scene/scroll";
 
 import { isMaybeMermaidDefinition } from "../mermaid";
 
@@ -3793,7 +3794,33 @@ class App extends React.Component<AppProps, AppState> {
   ) => {
     this.cancelInProgressAnimation?.();
     this.maybeUnfollowRemoteUser();
-    this.setState(state);
+    
+    // Apply scroll constraints if page bounds are enabled
+    if (typeof state === "function") {
+      this.setState((prevState, props) => {
+        const newState = state(prevState, props);
+        if (newState && this.state.canvasPageSettings?.enabled && 
+            ("scrollX" in newState || "scrollY" in newState)) {
+          const constrainedScroll = constrainScrollToPageBounds(
+            (newState as any).scrollX ?? prevState.scrollX,
+            (newState as any).scrollY ?? prevState.scrollY,
+            { ...prevState, ...newState }
+          );
+          return { ...newState, ...constrainedScroll } as any;
+        }
+        return newState;
+      });
+    } else if (state && this.state.canvasPageSettings?.enabled && 
+               ("scrollX" in state || "scrollY" in state)) {
+      const constrainedScroll = constrainScrollToPageBounds(
+        (state as any).scrollX ?? this.state.scrollX,
+        (state as any).scrollY ?? this.state.scrollY,
+        { ...this.state, ...state }
+      );
+      this.setState({ ...state, ...constrainedScroll } as any);
+    } else {
+      this.setState(state);
+    }
   };
 
   setToast = (
@@ -5731,16 +5758,35 @@ class App extends React.Component<AppProps, AppState> {
       gesture.lastCenter = center;
 
       const distance = getDistance(Array.from(gesture.pointers.values()));
-      const scaleFactor =
-        this.state.activeTool.type === "freedraw" && this.state.penMode
-          ? 1
-          : distance / gesture.initialDistance;
+      const scaleFactor = distance / gesture.initialDistance;
 
       const nextZoom = scaleFactor
         ? getNormalizedZoom(initialScale * scaleFactor)
         : this.state.zoom.value;
+      
+      // Debug log for pinch zoom (throttled)
+      if (Math.random() < 0.1) { // Only log 10% of the time to reduce console spam
+        console.log('Pinch zoom processing:', {
+          pointersSize: gesture.pointers.size,
+          distance,
+          initialDistance: gesture.initialDistance,
+          scaleFactor,
+          initialScale,
+          nextZoom,
+          currentZoom: this.state.zoom.value
+        });
+      }
 
-      this.setState((state) => {
+      // Stop panning during pinch zoom
+      if (isPanning) {
+        isPanning = false;
+      }
+      
+      // Prevent default behavior during pinch zoom
+      event.preventDefault();
+      
+      // Use translateCanvas for smooth animation and proper state management
+      this.translateCanvas((state) => {
         const zoomState = getStateForZoom(
           {
             viewportX: center.x,
@@ -5750,15 +5796,15 @@ class App extends React.Component<AppProps, AppState> {
           state,
         );
 
-        this.translateCanvas({
-          zoom: zoomState.zoom,
-          // 2x multiplier is just a magic number that makes this work correctly
-          // on touchscreen devices (note: if we get report that panning is slower/faster
-          // than actual movement, consider swapping with devicePixelRatio)
-          scrollX: zoomState.scrollX + 2 * (deltaX / nextZoom),
-          scrollY: zoomState.scrollY + 2 * (deltaY / nextZoom),
+        const newScrollX = zoomState.scrollX + 2 * (deltaX / nextZoom);
+        const newScrollY = zoomState.scrollY + 2 * (deltaY / nextZoom);
+        
+        return {
+          ...zoomState,
+          scrollX: newScrollX,
+          scrollY: newScrollY,
           shouldCacheIgnoreZoom: true,
-        });
+        };
       });
       this.resetShouldCacheIgnoreZoomDebounced();
     } else {
@@ -5772,7 +5818,8 @@ class App extends React.Component<AppProps, AppState> {
       isHoldingSpace ||
       isPanning ||
       isDraggingScrollBar ||
-      isHandToolActive(this.state)
+      (gesture.pointers.size >= 2) || // Skip when multi-touch (pinch zoom)
+      (gesture.initialScale && gesture.initialDistance) // Skip when pinch zoom is active
     ) {
       return;
     }
@@ -6348,6 +6395,52 @@ class App extends React.Component<AppProps, AppState> {
     this.maybeCleanupAfterMissingPointerUp(event.nativeEvent);
     this.maybeUnfollowRemoteUser();
 
+    // Enhanced touch handling for page-based canvas
+    if (this.state.canvasPageSettings?.enabled && event.pointerType === "touch") {
+      // Check if this is a finger touch vs stylus/pen
+      const isPen = (event.pointerType as string) === "pen" || 
+                    (event.pointerType === "touch" && (event as any).pressure > 0);
+      
+      // Only switch to hand tool for single finger touch
+      // Don't switch if we already have pointers (potential multi-touch)
+      if (!isPen && 
+          this.state.activeTool.type !== "hand" && 
+          gesture.pointers.size === 0) { // Only for first touch
+        // For finger touches, switch to hand tool for panning
+        this.setState({ 
+          activeTool: { 
+            type: "hand",
+            customType: null,
+            lastActiveTool: this.state.activeTool,
+            locked: false,
+            fromSelection: false
+          } 
+        }, () => {
+          // After setting hand tool, trigger panning behavior
+          setTimeout(() => {
+            this.handleCanvasPanUsingWheelOrSpaceDrag(event);
+          }, 0);
+        });
+      }
+    }
+
+    // Only allow drawing with stylus/pen when page mode is enabled
+    if (this.state.canvasPageSettings?.enabled && 
+        event.pointerType === "touch" && 
+        this.state.activeTool.type !== "hand" &&
+        this.state.activeTool.type !== "selection") {
+      // Check if this is a finger touch vs stylus/pen
+      // Modern browsers differentiate: pen has pressure, touch doesn't
+      const isPen = (event.pointerType as string) === "pen" || 
+                    (event.pointerType === "touch" && (event as any).pressure > 0);
+      
+      if (!isPen) {
+        // Prevent drawing with finger touches - only allow stylus/pen
+        event.preventDefault();
+        return;
+      }
+    }
+
     if (this.state.searchMatches) {
       this.setState((state) => {
         return {
@@ -6380,6 +6473,29 @@ class App extends React.Component<AppProps, AppState> {
     }
 
     this.updateGestureOnPointerDown(event);
+    
+    // If this is the second touch for pinch zoom, immediately switch away from hand tool
+    if (this.state.canvasPageSettings?.enabled && 
+        event.pointerType === "touch" && 
+        gesture.pointers.size === 2) {
+      
+      // Stop any ongoing panning since we're switching to pinch zoom
+      if (isPanning) {
+        isPanning = false;
+      }
+      
+      // Switch away from hand tool if we're in it
+      if (this.state.activeTool.type === "hand" && this.state.activeTool.lastActiveTool) {
+        this.setState({
+          activeTool: {
+            ...this.state.activeTool.lastActiveTool,
+            lastActiveTool: null,
+            locked: false,
+            fromSelection: false
+          }
+        });
+      }
+    }
 
     // if dragging element is freedraw and another pointerdown event occurs
     // a second finger is on the screen
@@ -6657,6 +6773,22 @@ class App extends React.Component<AppProps, AppState> {
     this.removePointer(event);
     this.lastPointerUpEvent = event;
 
+    // Reset tool from hand mode if it was temporarily set for touch scrolling
+    if (this.state.canvasPageSettings?.enabled && 
+        event.pointerType === "touch" && 
+        this.state.activeTool.type === "hand" &&
+        this.state.activeTool.lastActiveTool) {
+      const lastTool = this.state.activeTool.lastActiveTool!;
+      this.setState({ 
+        activeTool: { 
+          ...lastTool,
+          lastActiveTool: null,
+          locked: false,
+          fromSelection: false
+        } 
+      });
+    }
+
     const scenePointer = viewportCoordsToSceneCoords(
       { clientX: event.clientX, clientY: event.clientY },
       this.state,
@@ -6779,6 +6911,24 @@ class App extends React.Component<AppProps, AppState> {
     ) {
       return false;
     }
+    
+    // Don't start panning if pinch zoom is active or about to start
+    if (gesture.pointers.size >= 2) {
+      return false;
+    }
+    
+    // Only allow panning with single finger touch when page mode is enabled
+    if (this.state.canvasPageSettings?.enabled && 
+        "pointerType" in event && 
+        event.pointerType === "touch" && 
+        gesture.pointers.size > 1) {
+      return false;
+    }
+    
+    // Additional check: don't allow panning if we detect pinch zoom setup
+    if (gesture.initialScale && gesture.initialDistance) {
+      return false;
+    }
     isPanning = true;
 
     // due to event.preventDefault below, container wouldn't get focus
@@ -6885,11 +7035,40 @@ class App extends React.Component<AppProps, AppState> {
     });
 
     if (gesture.pointers.size === 2) {
+      const pointerArray = Array.from(gesture.pointers.values());
       gesture.lastCenter = getCenter(gesture.pointers);
       gesture.initialScale = this.state.zoom.value;
-      gesture.initialDistance = getDistance(
-        Array.from(gesture.pointers.values()),
-      );
+      gesture.initialDistance = getDistance(pointerArray);
+      
+      // Stop any ongoing panning when pinch zoom starts
+      if (isPanning) {
+        isPanning = false;
+      }
+      
+      // Force clear any hand tool when pinch zoom starts
+      if (this.state.canvasPageSettings?.enabled && 
+          this.state.activeTool.type === "hand" &&
+          this.state.activeTool.lastActiveTool) {
+        this.setState({
+          activeTool: {
+            ...this.state.activeTool.lastActiveTool,
+            lastActiveTool: null,
+            locked: false,
+            fromSelection: false
+          }
+        });
+      }
+      
+      // Debug log to check initialization
+      console.log('Pinch zoom initialized:', {
+        pointersSize: gesture.pointers.size,
+        initialScale: gesture.initialScale,
+        initialDistance: gesture.initialDistance,
+        center: gesture.lastCenter
+      });
+      
+      // Prevent default behavior to avoid browser zoom
+      event.preventDefault();
     }
   }
 
@@ -10978,17 +11157,40 @@ class App extends React.Component<AppProps, AppState> {
 
       // scroll horizontally when shift pressed
       if (event.shiftKey) {
-        this.translateCanvas(({ zoom, scrollX }) => ({
-          // on Mac, shift+wheel tends to result in deltaX
-          scrollX: scrollX - (deltaY || deltaX) / zoom.value,
-        }));
+        this.translateCanvas(({ zoom, scrollX, scrollY }) => {
+          const newScrollX = scrollX - (deltaY || deltaX) / zoom.value;
+          
+          // Apply page bounds constraint
+          const constrained = constrainScrollToPageBounds(
+            newScrollX,
+            scrollY,
+            this.state
+          );
+          
+          return {
+            scrollX: constrained.scrollX,
+            scrollY: constrained.scrollY,
+          };
+        });
         return;
       }
 
-      this.translateCanvas(({ zoom, scrollX, scrollY }) => ({
-        scrollX: scrollX - deltaX / zoom.value,
-        scrollY: scrollY - deltaY / zoom.value,
-      }));
+      this.translateCanvas(({ zoom, scrollX, scrollY }) => {
+        const newScrollX = scrollX - deltaX / zoom.value;
+        const newScrollY = scrollY - deltaY / zoom.value;
+        
+        // Apply page bounds constraint
+        const constrained = constrainScrollToPageBounds(
+          newScrollX,
+          newScrollY,
+          this.state
+        );
+        
+        return {
+          scrollX: constrained.scrollX,
+          scrollY: constrained.scrollY,
+        };
+      });
     },
   );
 

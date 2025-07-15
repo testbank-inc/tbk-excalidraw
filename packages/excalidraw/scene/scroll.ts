@@ -90,3 +90,48 @@ export const calculateScrollCenter = (
     zoom: appState.zoom,
   });
 };
+
+export const constrainScrollToPageBounds = (
+  scrollX: number,
+  scrollY: number,
+  appState: AppState,
+): { scrollX: number; scrollY: number } => {
+  const { canvasPageSettings, zoom, width, height } = appState;
+  
+  if (!canvasPageSettings?.enabled) {
+    return { scrollX, scrollY };
+  }
+
+  const viewportWidth = width / zoom.value;
+  const viewportHeight = height / zoom.value;
+  
+  // Page bounds: (0, 0) to (pageWidth, pageHeight)
+  const pageWidth = canvasPageSettings.width;
+  const pageHeight = canvasPageSettings.height;
+  
+  // Scroll limits based on page and viewport dimensions
+  // In Excalidraw, scroll values can be negative
+  // scrollX/scrollY represent the top-left corner of the viewport in scene coordinates
+  
+  // When page fits in viewport, center it
+  if (pageWidth <= viewportWidth && pageHeight <= viewportHeight) {
+    const centerX = -(viewportWidth - pageWidth) / 2;
+    const centerY = -(viewportHeight - pageHeight) / 2;
+    return {
+      scrollX: centerX,
+      scrollY: centerY,
+    };
+  }
+  
+  // When page is larger than viewport, allow scrolling within bounds
+  const minScrollX = Math.min(0, -(pageWidth - viewportWidth));
+  const maxScrollX = 0;
+  
+  const minScrollY = Math.min(0, -(pageHeight - viewportHeight));
+  const maxScrollY = 0;
+  
+  return {
+    scrollX: Math.max(minScrollX, Math.min(maxScrollX, scrollX)),
+    scrollY: Math.max(minScrollY, Math.min(maxScrollY, scrollY)),
+  };
+};

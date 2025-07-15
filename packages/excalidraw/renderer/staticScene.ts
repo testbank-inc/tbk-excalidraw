@@ -243,6 +243,25 @@ const _renderStaticScene = ({
   // Apply zoom
   context.scale(appState.zoom.value, appState.zoom.value);
 
+  // Page background
+  if ((appState as any).canvasPageSettings?.enabled) {
+    const pageX = 0;
+    const pageY = 0;
+    const pageWidth = (appState as any).canvasPageSettings.width;
+    const pageHeight = (appState as any).canvasPageSettings.height;
+    
+    // Fill page background
+    context.fillStyle = (appState as any).canvasPageSettings.backgroundColor;
+    context.fillRect(pageX, pageY, pageWidth, pageHeight);
+    
+    // Draw page border
+    if ((appState as any).canvasPageSettings.showBorder) {
+      context.strokeStyle = "#cccccc";
+      context.lineWidth = 1 / appState.zoom.value;
+      context.strokeRect(pageX, pageY, pageWidth, pageHeight);
+    }
+  }
+
   // Grid
   if (renderGrid) {
     strokeGrid(

@@ -124,6 +124,13 @@ export const getDefaultAppState = (): Omit<
     searchMatches: null,
     lockedMultiSelections: {},
     activeLockedId: null,
+    canvasPageSettings: {
+      enabled: true,
+      width: 794,  // A4 width at 96 DPI
+      height: 1123, // A4 height at 96 DPI 
+      backgroundColor: "#ffffff",
+      showBorder: true,
+    },
   };
 };
 
@@ -249,6 +256,7 @@ const APP_STATE_STORAGE_CONF = (<
   searchMatches: { browser: false, export: false, server: false },
   lockedMultiSelections: { browser: true, export: true, server: true },
   activeLockedId: { browser: false, export: false, server: false },
+  canvasPageSettings: { browser: true, export: true, server: true },
 });
 
 const _clearAppStateForStorage = <

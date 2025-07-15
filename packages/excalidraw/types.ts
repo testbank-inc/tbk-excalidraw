@@ -358,7 +358,7 @@ export interface AppState {
   openSidebar: { name: SidebarName; tab?: SidebarTabName } | null;
   openDialog:
     | null
-    | { name: "imageExport" | "help" | "jsonExport" }
+    | { name: "imageExport" | "help" | "jsonExport" | "pageSettings" }
     | { name: "ttd"; tab: "text-to-diagram" | "mermaid" }
     | { name: "commandPalette" }
     | { name: "elementLinkSelector"; sourceElementId: ExcalidrawElement["id"] };
@@ -444,6 +444,15 @@ export interface AppState {
   // as elements are unlocked, we remove the groupId from the elements
   // and also remove groupId from this map
   lockedMultiSelections: { [groupId: string]: true };
+
+  /** canvas page settings */
+  canvasPageSettings: {
+    enabled: boolean;
+    width: number;
+    height: number;
+    backgroundColor: string;
+    showBorder: boolean;
+  };
 }
 
 export type SearchMatch = {

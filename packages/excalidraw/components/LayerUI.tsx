@@ -48,6 +48,7 @@ import { DefaultSidebar } from "./DefaultSidebar";
 import { TTDDialog } from "./TTDDialog/TTDDialog";
 import { Stats } from "./Stats";
 import ElementLinkDialog from "./ElementLinkDialog";
+import { PageSettingsDialog } from "./PageSettingsDialog";
 import { ErrorDialog } from "./ErrorDialog";
 import { EyeDropper, activeEyeDropperAtom } from "./EyeDropper";
 import { FixedSideContainer } from "./FixedSideContainer";
@@ -493,6 +494,15 @@ const LayerUI = ({
           scene={app.scene}
           appState={appState}
           generateLinkForSelection={generateLinkForSelection}
+        />
+      )}
+      {appState.openDialog?.name === "pageSettings" && (
+        <PageSettingsDialog
+          appState={appState}
+          onUpdateAppState={setAppState}
+          onClose={() => {
+            setAppState({ openDialog: null });
+          }}
         />
       )}
       <tunnels.OverwriteConfirmDialogTunnel.Out />

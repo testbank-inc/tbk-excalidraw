@@ -230,7 +230,8 @@
     "publishLibrary": "Publish",
     "submit": "Submit",
     "confirm": "Confirm",
-    "embeddableInteractionButton": "Click to interact"
+    "embeddableInteractionButton": "Click to interact",
+    "pageSettings": "Page settings"
   },
   "alerts": {
     "clearReset": "This will clear the whole canvas. Are you sure?",
@@ -640,5 +641,14 @@
     },
     "itemNotAvailable": "Command is not available...",
     "shortcutHint": "For Command palette, use {{shortcut}}"
+  },
+  "pageSettings": {
+    "title": "Page Settings",
+    "enableBoundedCanvas": "Enable bounded canvas",
+    "presets": "Presets",
+    "width": "Width",
+    "height": "Height",
+    "backgroundColor": "Background Color",
+    "showBorder": "Show border"
   }
 }

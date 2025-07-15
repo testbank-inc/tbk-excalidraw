@@ -11,6 +11,7 @@ import {
   actionShortcuts,
   actionToggleSearchMenu,
   actionToggleTheme,
+  actionTogglePageSettings,
 } from "../../actions";
 import { getShortcutFromShortcutName } from "../../actions/shortcuts";
 import { trackEvent } from "../../analytics";
@@ -188,6 +189,29 @@ export const Help = () => {
   );
 };
 Help.displayName = "Help";
+
+export const PageSettings = () => {
+  const { t } = useI18n();
+  const actionManager = useExcalidrawActionManager();
+
+  return (
+    <DropdownMenuItem
+      data-testid="page-settings-menu-item"
+      icon={(
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <rect x="3" y="2" width="14" height="16" rx="1" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+          <rect x="5" y="4" width="10" height="12" rx="0.5" stroke="currentColor" strokeWidth="1" fill="none"/>
+        </svg>
+      )}
+      onSelect={() => actionManager.executeAction(actionTogglePageSettings)}
+      shortcut="Ctrl+P"
+      aria-label={t("pageSettings.title")}
+    >
+      {t("pageSettings.title")}
+    </DropdownMenuItem>
+  );
+};
+PageSettings.displayName = "PageSettings";
 
 export const ClearCanvas = () => {
   const { t } = useI18n();
