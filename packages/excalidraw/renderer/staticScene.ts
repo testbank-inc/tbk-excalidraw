@@ -243,24 +243,29 @@ const _renderStaticScene = ({
   // Apply zoom
   context.scale(appState.zoom.value, appState.zoom.value);
 
-  // Page background
-  // if ((appState as any).canvasPageSettings?.enabled) {
-  //   const pageX = 0;
-  //   const pageY = 0;
-  //   const pageWidth = (appState as any).canvasPageSettings.width;
-  //   const pageHeight = (appState as any).canvasPageSettings.height;
+  // Page background and clipping
+  if ((appState as any).canvasPageSettings?.enabled) {
+    const pageWidth = 1000; // 캔버스 크기는 항상 1000x1000 고정
+    const pageHeight = 1000;
 
-  //   // Fill page background
-  //   context.fillStyle = (appState as any).canvasPageSettings.backgroundColor;
-  //   context.fillRect(pageX, pageY, pageWidth, pageHeight);
+    // Save context before applying changes
+    context.save();
 
-  //   // Draw page border
-  //   if ((appState as any).canvasPageSettings.showBorder) {
-  //     context.strokeStyle = "#cccccc";
-  //     context.lineWidth = 1 / appState.zoom.value;
-  //     context.strokeRect(pageX, pageY, pageWidth, pageHeight);
-  //   }
-  // }
+    // Fill page background (only page area, not entire viewport)
+    context.fillStyle = "#FFFDF0"; // 백그라운드 색상 고정
+    context.fillRect(0, 0, pageWidth, pageHeight);
+
+    // Apply clipping to constrain drawing to page area
+    context.beginPath();
+    context.rect(0, 0, pageWidth, pageHeight);
+    context.clip();
+
+    if ((appState as any).canvasPageSettings.showBorder) {
+      context.strokeStyle = "#FF0000";
+      context.lineWidth = 2 / appState.zoom.value;
+      context.strokeRect(0, 0, pageWidth, pageHeight);
+    }
+  }
 
   // Grid
   if (renderGrid) {
@@ -477,6 +482,11 @@ const _renderStaticScene = ({
       console.error(error);
     }
   });
+
+  // Restore context if page clipping was applied
+  if ((appState as any).canvasPageSettings?.enabled) {
+    context.restore();
+  }
 };
 
 /** throttled to animation framerate */

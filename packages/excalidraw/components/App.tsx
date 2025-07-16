@@ -385,7 +385,7 @@ import { LaserTrails } from "../laser-trails";
 import { withBatchedUpdates, withBatchedUpdatesThrottled } from "../reactUtils";
 import { textWysiwyg } from "../wysiwyg/textWysiwyg";
 import { isOverScrollBars } from "../scene/scrollbars";
-import { constrainScrollToPageBounds } from "../scene/scroll";
+import { constrainScrollToPageBounds, constrainZoomForPageBounds } from "../scene/scroll";
 
 import { isMaybeMermaidDefinition } from "../mermaid";
 
@@ -458,6 +458,7 @@ import type {
   GenerateDiagramToCode,
   NullableGridSize,
   Offsets,
+  NormalizedZoomValue,
 } from "../types";
 import type { RoughCanvas } from "roughjs/bin/canvas";
 import type { Action, ActionResult } from "../actions/types";
@@ -683,6 +684,8 @@ class App extends React.Component<AppProps, AppState> {
         },
       }),
     };
+
+    // 일시적으로 모든 초기화 로직 비활성화
 
     this.id = nanoid();
     this.library = new Library(this);
@@ -11471,11 +11474,30 @@ class App extends React.Component<AppProps, AppState> {
       }
 
       this.setState(
-        {
-          width,
-          height,
-          offsetLeft,
-          offsetTop,
+        (prevState) => {
+          const newState = {
+            width,
+            height,
+            offsetLeft,
+            offsetTop,
+          };
+          
+          // Apply zoom constraint when page settings are enabled
+          if (prevState.canvasPageSettings?.enabled) {
+            const constrainedZoom = constrainZoomForPageBounds(
+              prevState.zoom.value,
+              { ...prevState, ...newState }
+            );
+            
+            if (constrainedZoom !== prevState.zoom.value) {
+              return {
+                ...newState,
+                zoom: { value: constrainedZoom as NormalizedZoomValue },
+              };
+            }
+          }
+          
+          return newState;
         },
         () => {
           cb && cb();

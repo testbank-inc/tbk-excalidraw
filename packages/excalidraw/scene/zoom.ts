@@ -1,5 +1,5 @@
 import type { AppState, NormalizedZoomValue } from "../types";
-import { constrainScrollToPageBounds } from "./scroll";
+import { constrainScrollToPageBounds, constrainZoomForPageBounds } from "./scroll";
 
 export const getStateForZoom = (
   {
@@ -17,14 +17,17 @@ export const getStateForZoom = (
   const appLayerY = viewportY - appState.offsetTop;
 
   const currentZoom = appState.zoom.value;
+  
+  // Apply zoom constraints for page bounds
+  const constrainedZoom = constrainZoomForPageBounds(nextZoom, appState);
 
   // get original scroll position without zoom
   const baseScrollX = appState.scrollX + (appLayerX - appLayerX / currentZoom);
   const baseScrollY = appState.scrollY + (appLayerY - appLayerY / currentZoom);
 
-  // get scroll offsets for target zoom level
-  const zoomOffsetScrollX = -(appLayerX - appLayerX / nextZoom);
-  const zoomOffsetScrollY = -(appLayerY - appLayerY / nextZoom);
+  // get scroll offsets for target zoom level (using constrained zoom)
+  const zoomOffsetScrollX = -(appLayerX - appLayerX / constrainedZoom);
+  const zoomOffsetScrollY = -(appLayerY - appLayerY / constrainedZoom);
 
   let scrollX = baseScrollX + zoomOffsetScrollX;
   let scrollY = baseScrollY + zoomOffsetScrollY;
@@ -34,7 +37,7 @@ export const getStateForZoom = (
     // Create a temporary state for constraint calculation
     const tempState = { 
       ...appState, 
-      zoom: { value: nextZoom },
+      zoom: { value: constrainedZoom },
       scrollX,
       scrollY,
       width: appState.width,
@@ -54,7 +57,7 @@ export const getStateForZoom = (
     scrollX,
     scrollY,
     zoom: {
-      value: nextZoom,
+      value: constrainedZoom,
     },
   };
 };

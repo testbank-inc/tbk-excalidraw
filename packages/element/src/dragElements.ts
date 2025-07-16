@@ -102,8 +102,35 @@ export const dragSelectedElements = (
     gridSize,
   );
 
+  // 페이지 경계 제한을 위한 오프셋 조정
+  const PAGE_WIDTH = 1000;
+  const PAGE_HEIGHT = 1000;
+  
+  // 모든 원본 요소들이 페이지 경계를 벗어나지 않도록 오프셋 조정
+  let constrainedOffsetX = adjustedOffset.x;
+  let constrainedOffsetY = adjustedOffset.y;
+  
+  for (const element of origElements) {
+    const newX = element.x + adjustedOffset.x;
+    const newY = element.y + adjustedOffset.y;
+    
+    // 각 요소가 페이지 경계를 벗어나지 않도록 오프셋 제한
+    const maxOffsetX = PAGE_WIDTH - element.width - element.x;
+    const minOffsetX = -element.x;
+    const maxOffsetY = PAGE_HEIGHT - element.height - element.y;
+    const minOffsetY = -element.y;
+    
+    constrainedOffsetX = Math.max(minOffsetX, Math.min(maxOffsetX, constrainedOffsetX));
+    constrainedOffsetY = Math.max(minOffsetY, Math.min(maxOffsetY, constrainedOffsetY));
+  }
+  
+  const finalOffset = {
+    x: constrainedOffsetX,
+    y: constrainedOffsetY,
+  };
+
   elementsToUpdate.forEach((element) => {
-    updateElementCoords(pointerDownState, element, scene, adjustedOffset);
+    updateElementCoords(pointerDownState, element, scene, finalOffset);
     if (!isArrowElement(element)) {
       // skip arrow labels since we calculate its position during render
       const textElement = getBoundTextElement(
@@ -115,7 +142,7 @@ export const dragSelectedElements = (
           pointerDownState,
           textElement,
           scene,
-          adjustedOffset,
+          finalOffset,
         );
       }
       updateBoundElements(element, scene, {
@@ -292,11 +319,22 @@ export const dragNewElement = ({
       };
     }
 
+    // 페이지 경계 내에서만 요소를 생성하도록 제한
+    const PAGE_WIDTH = 1000;
+    const PAGE_HEIGHT = 1000;
+    
+    let finalX = newX + (originOffset?.x ?? 0);
+    let finalY = newY + (originOffset?.y ?? 0);
+    
+    // 요소가 페이지 경계를 벗어나지 않도록 제한
+    finalX = Math.max(0, Math.min(PAGE_WIDTH - width, finalX));
+    finalY = Math.max(0, Math.min(PAGE_HEIGHT - height, finalY));
+
     scene.mutateElement(
       newElement,
       {
-        x: newX + (originOffset?.x ?? 0),
-        y: newY + (originOffset?.y ?? 0),
+        x: finalX,
+        y: finalY,
         width,
         height,
         ...textAutoResize,
