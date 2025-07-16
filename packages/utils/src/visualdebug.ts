@@ -107,20 +107,20 @@ export const debugDrawBounds = (
     debugDrawLine(
       [
         lineSegment(
-          pointFrom<GlobalPoint>(bbox[0], bbox[1]),
-          pointFrom<GlobalPoint>(bbox[2], bbox[1]),
+          pointFrom(bbox[0], bbox[1]),
+          pointFrom(bbox[2], bbox[1]),
         ),
         lineSegment(
-          pointFrom<GlobalPoint>(bbox[2], bbox[1]),
-          pointFrom<GlobalPoint>(bbox[2], bbox[3]),
+          pointFrom(bbox[2], bbox[1]),
+          pointFrom(bbox[2], bbox[3]),
         ),
         lineSegment(
-          pointFrom<GlobalPoint>(bbox[2], bbox[3]),
-          pointFrom<GlobalPoint>(bbox[0], bbox[3]),
+          pointFrom(bbox[2], bbox[3]),
+          pointFrom(bbox[0], bbox[3]),
         ),
         lineSegment(
-          pointFrom<GlobalPoint>(bbox[0], bbox[3]),
-          pointFrom<GlobalPoint>(bbox[0], bbox[1]),
+          pointFrom(bbox[0], bbox[3]),
+          pointFrom(bbox[0], bbox[1]),
         ),
       ],
       {
@@ -144,7 +144,7 @@ export const debugDrawPoints = (
   options?: any,
 ) => {
   points.forEach((p) =>
-    debugDrawPoint(pointFrom<GlobalPoint>(x + p[0], y + p[1]), options),
+    debugDrawPoint(pointFrom(x + p[0], y + p[1]), options),
   );
 };
 

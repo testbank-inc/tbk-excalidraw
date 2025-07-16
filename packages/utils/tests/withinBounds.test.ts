@@ -1,6 +1,6 @@
 import { API } from "@excalidraw/excalidraw/tests/helpers/api";
 
-import type { Bounds } from "@testbank-inc/element";
+type Bounds = [minX: number, minY: number, maxX: number, maxY: number];
 
 import {
   elementPartiallyOverlapsWithOrContainsBBox,

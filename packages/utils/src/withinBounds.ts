@@ -13,20 +13,19 @@ import {
   pointRotateRads,
   rangeInclusive,
 } from "@testbank-inc/math";
+import type { LocalPoint } from "@testbank-inc/math";
 
-import type { Bounds } from "@testbank-inc/element";
 import type {
   ExcalidrawElement,
   ExcalidrawFreeDrawElement,
   ExcalidrawLinearElement,
   NonDeletedExcalidrawElement,
 } from "@excalidraw/element/types";
-import type { LocalPoint } from "@testbank-inc/math";
 
 type Element = NonDeletedExcalidrawElement;
 type Elements = readonly NonDeletedExcalidrawElement[];
-
 type Points = readonly LocalPoint[];
+type Bounds = [minX: number, minY: number, maxX: number, maxY: number];
 
 /** @returns vertices relative to element's top-left [0,0] position  */
 const getNonLinearElementRelativePoints = (
@@ -95,10 +94,10 @@ const getRotatedBBox = (element: Element): Bounds => {
   const points = getElementRelativePoints(element);
 
   const { cx, cy } = getMinMaxPoints(points);
-  const centerPoint = pointFrom<LocalPoint>(cx, cy);
+  const centerPoint = pointFrom(cx, cy);
 
   const rotatedPoints = points.map((p) =>
-    pointRotateRads(p, centerPoint, element.angle),
+    pointRotateRads(p, centerPoint, element.angle as any),
   );
   const { minX, minY, maxX, maxY } = getMinMaxPoints(rotatedPoints);
 

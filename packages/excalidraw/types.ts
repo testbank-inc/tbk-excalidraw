@@ -616,6 +616,13 @@ export interface ExcalidrawProps {
   onScrollChange?: (scrollX: number, scrollY: number, zoom: Zoom) => void;
   onUserFollow?: (payload: OnUserFollowedPayload) => void;
   children?: React.ReactNode;
+  canvasPageSettings?: {
+    enabled: boolean;
+    width: number;
+    height: number;
+    backgroundColor?: string;
+    showBorder?: boolean;
+  };
   validateEmbeddable?:
     | boolean
     | string[]
