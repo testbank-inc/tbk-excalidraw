@@ -1,4 +1,4 @@
-import type { LocalPoint, Radians } from "@excalidraw/math";
+import type { LocalPoint, Radians } from "@testbank-inc/math";
 
 import type {
   FONT_FAMILY,
@@ -6,7 +6,7 @@ import type {
   TEXT_ALIGN,
   THEME,
   VERTICAL_ALIGN,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import type {
   MakeBrand,

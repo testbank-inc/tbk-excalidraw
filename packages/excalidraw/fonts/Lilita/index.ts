@@ -1,4 +1,4 @@
-import { GOOGLE_FONTS_RANGES } from "@excalidraw/common";
+import { GOOGLE_FONTS_RANGES } from "@testbank-inc/common";
 
 import { type ExcalidrawFontFaceDescriptor } from "../Fonts";
 

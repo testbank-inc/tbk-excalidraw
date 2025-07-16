@@ -7,7 +7,7 @@ import {
   isFirefox,
   EXPORT_SCALES,
   cloneJSON,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import type { NonDeletedExcalidrawElement } from "@excalidraw/element/types";
 

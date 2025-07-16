@@ -1,6 +1,6 @@
-import { ROUNDNESS, assertNever } from "@excalidraw/common";
+import { ROUNDNESS, assertNever } from "@testbank-inc/common";
 
-import { pointsEqual } from "@excalidraw/math";
+import { pointsEqual } from "@testbank-inc/math";
 
 import type { ElementOrToolType } from "@excalidraw/excalidraw/types";
 

@@ -1,4 +1,4 @@
-import type { EDITOR_LS_KEYS } from "@excalidraw/common";
+import type { EDITOR_LS_KEYS } from "@testbank-inc/common";
 
 import type { JSONValue } from "../types";
 

@@ -1,15 +1,15 @@
-import { LinearElementEditor } from "@excalidraw/element";
+import { LinearElementEditor } from "@testbank-inc/element";
 import {
   isElbowArrow,
   isLinearElement,
   isLineElement,
-} from "@excalidraw/element";
-import { arrayToMap } from "@excalidraw/common";
+} from "@testbank-inc/element";
+import { arrayToMap } from "@testbank-inc/common";
 
 import {
   toggleLinePolygonState,
   CaptureUpdateAction,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
 import type {
   ExcalidrawLinearElement,

@@ -7,20 +7,20 @@ import {
   isDevEnv,
   isTestEnv,
   toArray,
-} from "@excalidraw/common";
-import { isNonDeletedElement } from "@excalidraw/element";
-import { isFrameLikeElement } from "@excalidraw/element";
-import { getElementsInGroup } from "@excalidraw/element";
+} from "@testbank-inc/common";
+import { isNonDeletedElement } from "@testbank-inc/element";
+import { isFrameLikeElement } from "@testbank-inc/element";
+import { getElementsInGroup } from "@testbank-inc/element";
 
 import {
   syncInvalidIndices,
   syncMovedIndices,
   validateFractionalIndices,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import { getSelectedElements } from "@excalidraw/element";
+import { getSelectedElements } from "@testbank-inc/element";
 
-import { mutateElement, type ElementUpdate } from "@excalidraw/element";
+import { mutateElement, type ElementUpdate } from "@testbank-inc/element";
 
 import type {
   ExcalidrawElement,

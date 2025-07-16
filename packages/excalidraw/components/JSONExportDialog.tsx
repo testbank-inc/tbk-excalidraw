@@ -1,6 +1,6 @@
 import React from "react";
 
-import { getFrame } from "@excalidraw/common";
+import { getFrame } from "@testbank-inc/common";
 
 import type { NonDeletedExcalidrawElement } from "@excalidraw/element/types";
 

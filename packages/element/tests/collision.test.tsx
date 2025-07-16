@@ -1,4 +1,4 @@
-import { type GlobalPoint, type LocalPoint, pointFrom } from "@excalidraw/math";
+import { type GlobalPoint, type LocalPoint, pointFrom } from "@testbank-inc/math";
 import { Excalidraw } from "@excalidraw/excalidraw";
 import { UI } from "@excalidraw/excalidraw/tests/helpers/ui";
 import "@excalidraw/utils/test-utils";

@@ -1,4 +1,4 @@
-import { pointFrom } from "@excalidraw/math";
+import { pointFrom } from "@testbank-inc/math";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
@@ -21,24 +21,24 @@ import {
   getLineHeight,
   isTransparent,
   reduceToCommonValue,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
-import { canBecomePolygon, getNonDeletedElements } from "@excalidraw/element";
+import { canBecomePolygon, getNonDeletedElements } from "@testbank-inc/element";
 
 import {
   bindLinearElement,
   calculateFixedPointForElbowArrowBinding,
   updateBoundElements,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import { LinearElementEditor } from "@excalidraw/element";
+import { LinearElementEditor } from "@testbank-inc/element";
 
-import { newElementWith } from "@excalidraw/element";
+import { newElementWith } from "@testbank-inc/element";
 
 import {
   getBoundTextElement,
   redrawTextBoundingBox,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
 import {
   isArrowElement,
@@ -48,17 +48,17 @@ import {
   isLineElement,
   isTextElement,
   isUsingAdaptiveRadius,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import { hasStrokeColor } from "@excalidraw/element";
+import { hasStrokeColor } from "@testbank-inc/element";
 
 import {
   updateElbowArrowPoints,
   CaptureUpdateAction,
   toggleLinePolygonState,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import type { LocalPoint } from "@excalidraw/math";
+import type { LocalPoint } from "@testbank-inc/math";
 
 import type {
   Arrowhead,
@@ -72,9 +72,9 @@ import type {
   VerticalAlign,
 } from "@excalidraw/element/types";
 
-import type { Scene } from "@excalidraw/element";
+import type { Scene } from "@testbank-inc/element";
 
-import type { CaptureUpdateActionType } from "@excalidraw/element";
+import type { CaptureUpdateActionType } from "@testbank-inc/element";
 
 import { trackEvent } from "../analytics";
 import { RadioSelection } from "../components/RadioSelection";

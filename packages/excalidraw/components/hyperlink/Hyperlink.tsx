@@ -1,4 +1,4 @@
-import { pointFrom, type GlobalPoint } from "@excalidraw/math";
+import { pointFrom, type GlobalPoint } from "@testbank-inc/math";
 import clsx from "clsx";
 import {
   useCallback,
@@ -8,15 +8,15 @@ import {
   useState,
 } from "react";
 
-import { EVENT, HYPERLINK_TOOLTIP_DELAY, KEYS } from "@excalidraw/common";
+import { EVENT, HYPERLINK_TOOLTIP_DELAY, KEYS } from "@testbank-inc/common";
 
-import { getElementAbsoluteCoords } from "@excalidraw/element";
+import { getElementAbsoluteCoords } from "@testbank-inc/element";
 
-import { hitElementBoundingBox } from "@excalidraw/element";
+import { hitElementBoundingBox } from "@testbank-inc/element";
 
-import { isElementLink } from "@excalidraw/element";
+import { isElementLink } from "@testbank-inc/element";
 
-import { getEmbedLink, embeddableURLValidator } from "@excalidraw/element";
+import { getEmbedLink, embeddableURLValidator } from "@testbank-inc/element";
 
 import {
   sceneCoordsToViewportCoords,
@@ -24,11 +24,11 @@ import {
   wrapEvent,
   isLocalLink,
   normalizeLink,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
-import { isEmbeddableElement } from "@excalidraw/element";
+import { isEmbeddableElement } from "@testbank-inc/element";
 
-import type { Scene } from "@excalidraw/element";
+import type { Scene } from "@testbank-inc/element";
 
 import type {
   ElementsMap,

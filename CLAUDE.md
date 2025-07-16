@@ -32,3 +32,7 @@ yarn fix             # Auto-fix formatting and linting issues
 - Internal packages use path aliases (see `vitest.config.mts`)
 - Build system uses esbuild for packages, Vite for the app
 - TypeScript throughout with strict configuration
+
+## Memories
+
+- testbank excalidraw: A project for exploring and understanding the Excalidraw repository structure and development workflow

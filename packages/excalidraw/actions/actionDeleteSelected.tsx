@@ -1,23 +1,23 @@
-import { KEYS, updateActiveTool } from "@excalidraw/common";
+import { KEYS, updateActiveTool } from "@testbank-inc/common";
 
-import { getNonDeletedElements } from "@excalidraw/element";
-import { fixBindingsAfterDeletion } from "@excalidraw/element";
-import { LinearElementEditor } from "@excalidraw/element";
-import { newElementWith } from "@excalidraw/element";
-import { getContainerElement } from "@excalidraw/element";
+import { getNonDeletedElements } from "@testbank-inc/element";
+import { fixBindingsAfterDeletion } from "@testbank-inc/element";
+import { LinearElementEditor } from "@testbank-inc/element";
+import { newElementWith } from "@testbank-inc/element";
+import { getContainerElement } from "@testbank-inc/element";
 import {
   isBoundToContainer,
   isElbowArrow,
   isFrameLikeElement,
-} from "@excalidraw/element";
-import { getFrameChildren } from "@excalidraw/element";
+} from "@testbank-inc/element";
+import { getFrameChildren } from "@testbank-inc/element";
 
 import {
   getElementsInGroup,
   selectGroupsForSelectedElements,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import { CaptureUpdateAction } from "@excalidraw/element";
+import { CaptureUpdateAction } from "@testbank-inc/element";
 
 import type { ExcalidrawElement } from "@excalidraw/element/types";
 

@@ -16,7 +16,7 @@ import {
   vectorSubtract,
   vectorDot,
   vectorNormalize,
-} from "@excalidraw/math";
+} from "@testbank-inc/math";
 
 import {
   COLOR_PALETTE,
@@ -100,7 +100,7 @@ import {
   randomInteger,
   CLASSES,
   Emitter,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import {
   getObservedAppState,
@@ -232,9 +232,9 @@ import {
   hitElementBoundingBox,
   isLineElement,
   isSimpleArrow,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import type { LocalPoint, Radians } from "@excalidraw/math";
+import type { LocalPoint, Radians } from "@testbank-inc/math";
 
 import type {
   ExcalidrawElement,
@@ -5743,9 +5743,27 @@ class App extends React.Component<AppProps, AppState> {
         x: event.clientX,
         y: event.clientY,
       });
+    } else if (event.pointerType === "touch" && this.state.canvasPageSettings?.enabled) {
+      // Ensure touch pointers are tracked for pinch zoom
+      gesture.pointers.set(event.pointerId, {
+        x: event.clientX,
+        y: event.clientY,
+      });
     }
 
     const initialScale = gesture.initialScale;
+    
+    // Debug log to see what's happening
+    if (gesture.pointers.size === 2) {
+      console.log('Two pointers detected in move:', {
+        hasLastCenter: !!gesture.lastCenter,
+        hasInitialScale: !!initialScale,
+        hasInitialDistance: !!gesture.initialDistance,
+        initialScale,
+        initialDistance: gesture.initialDistance
+      });
+    }
+    
     if (
       gesture.pointers.size === 2 &&
       gesture.lastCenter &&
@@ -5764,18 +5782,18 @@ class App extends React.Component<AppProps, AppState> {
         ? getNormalizedZoom(initialScale * scaleFactor)
         : this.state.zoom.value;
       
-      // Debug log for pinch zoom (throttled)
-      if (Math.random() < 0.1) { // Only log 10% of the time to reduce console spam
-        console.log('Pinch zoom processing:', {
-          pointersSize: gesture.pointers.size,
-          distance,
-          initialDistance: gesture.initialDistance,
-          scaleFactor,
-          initialScale,
-          nextZoom,
-          currentZoom: this.state.zoom.value
-        });
-      }
+      // Debug log for pinch zoom
+      console.log('Pinch zoom processing:', {
+        pointersSize: gesture.pointers.size,
+        distance,
+        initialDistance: gesture.initialDistance,
+        scaleFactor,
+        initialScale,
+        nextZoom,
+        currentZoom: this.state.zoom.value,
+        deltaX,
+        deltaY
+      });
 
       // Stop panning during pinch zoom
       if (isPanning) {
@@ -5786,6 +5804,7 @@ class App extends React.Component<AppProps, AppState> {
       event.preventDefault();
       
       // Use translateCanvas for smooth animation and proper state management
+      console.log('About to call translateCanvas for pinch zoom');
       this.translateCanvas((state) => {
         const zoomState = getStateForZoom(
           {
@@ -5798,6 +5817,14 @@ class App extends React.Component<AppProps, AppState> {
 
         const newScrollX = zoomState.scrollX + 2 * (deltaX / nextZoom);
         const newScrollY = zoomState.scrollY + 2 * (deltaY / nextZoom);
+        
+        console.log('translateCanvas called with:', {
+          zoomState,
+          newScrollX,
+          newScrollY,
+          originalZoom: state.zoom.value,
+          nextZoom
+        });
         
         return {
           ...zoomState,
@@ -6385,6 +6412,12 @@ class App extends React.Component<AppProps, AppState> {
   private handleCanvasPointerDown = (
     event: React.PointerEvent<HTMLElement>,
   ) => {
+    console.log('handleCanvasPointerDown called:', {
+      pointerId: event.pointerId,
+      pointerType: event.pointerType,
+      currentPointersSize: gesture.pointers.size
+    });
+    
     const target = event.target as HTMLElement;
     // capture subsequent pointer events to the canvas
     // this makes other elements non-interactive until pointer up
@@ -6395,17 +6428,82 @@ class App extends React.Component<AppProps, AppState> {
     this.maybeCleanupAfterMissingPointerUp(event.nativeEvent);
     this.maybeUnfollowRemoteUser();
 
+    // Add pointer to gesture tracking immediately for touch events
+    if (event.pointerType === "touch") {
+      console.log('Adding touch pointer to gesture early');
+      gesture.pointers.set(event.pointerId, {
+        x: event.clientX,
+        y: event.clientY,
+      });
+      console.log('Early gesture update:', {
+        pointerId: event.pointerId,
+        pointersSize: gesture.pointers.size
+      });
+      
+      // Initialize pinch zoom immediately when second touch is detected
+      if (gesture.pointers.size === 2 && this.state.canvasPageSettings?.enabled) {
+        const pointerArray = Array.from(gesture.pointers.values());
+        gesture.lastCenter = getCenter(gesture.pointers);
+        gesture.initialScale = this.state.zoom.value;
+        gesture.initialDistance = getDistance(pointerArray);
+        
+        console.log('Early pinch zoom initialization:', {
+          lastCenter: gesture.lastCenter,
+          initialScale: gesture.initialScale,
+          initialDistance: gesture.initialDistance
+        });
+        
+        // Stop any ongoing panning
+        if (isPanning) {
+          isPanning = false;
+        }
+        
+        // Prevent default browser behavior
+        event.preventDefault();
+      }
+    }
+
     // Enhanced touch handling for page-based canvas
     if (this.state.canvasPageSettings?.enabled && event.pointerType === "touch") {
+      console.log('Page-based canvas touch handling');
       // Check if this is a finger touch vs stylus/pen
       const isPen = (event.pointerType as string) === "pen" || 
                     (event.pointerType === "touch" && (event as any).pressure > 0);
       
-      // Only switch to hand tool for single finger touch
-      // Don't switch if we already have pointers (potential multi-touch)
+      console.log('Touch analysis:', {
+        isPen,
+        activeTool: this.state.activeTool.type,
+        gesturePointersSize: gesture.pointers.size
+      });
+      
+      // Check if there are selected elements
+      const hasSelectedElements = Object.keys(this.state.selectedElementIds).length > 0;
+      
+      console.log('Selection state:', {
+        hasSelectedElements,
+        selectedElementIds: this.state.selectedElementIds,
+        activeTool: this.state.activeTool.type
+      });
+      
+      // Only switch to hand tool for single finger touch if:
+      // 1. Not a pen
+      // 2. Not already hand tool
+      // 3. Single touch (not multi-touch)
+      // 4. No selected elements (to allow element dragging) OR using selection tool without selected elements
+      const isSelectionTool = this.state.activeTool.type === "selection";
+      const shouldAllowPanning = !hasSelectedElements || (isSelectionTool && !hasSelectedElements);
+      
+      console.log('Panning decision:', {
+        isSelectionTool,
+        hasSelectedElements,
+        shouldAllowPanning
+      });
+      
       if (!isPen && 
-          this.state.activeTool.type !== "hand" && 
-          gesture.pointers.size === 0) { // Only for first touch
+          !isHandToolActive(this.state) && 
+          gesture.pointers.size === 1 && 
+          shouldAllowPanning) { // Allow hand tool for panning when appropriate
+        console.log('Switching to hand tool for panning');
         // For finger touches, switch to hand tool for panning
         this.setState({ 
           activeTool: { 
@@ -6421,6 +6519,8 @@ class App extends React.Component<AppProps, AppState> {
             this.handleCanvasPanUsingWheelOrSpaceDrag(event);
           }, 0);
         });
+      } else if (hasSelectedElements && !isPen && gesture.pointers.size === 1) {
+        console.log('Selected elements present - allowing element dragging, not switching to hand tool');
       }
     }
 
@@ -6429,13 +6529,22 @@ class App extends React.Component<AppProps, AppState> {
         event.pointerType === "touch" && 
         this.state.activeTool.type !== "hand" &&
         this.state.activeTool.type !== "selection") {
+      console.log('Checking stylus/pen drawing restriction');
       // Check if this is a finger touch vs stylus/pen
       // Modern browsers differentiate: pen has pressure, touch doesn't
       const isPen = (event.pointerType as string) === "pen" || 
                     (event.pointerType === "touch" && (event as any).pressure > 0);
       
-      if (!isPen) {
+      console.log('Drawing restriction check:', {
+        isPen,
+        gesturePointersSize: gesture.pointers.size,
+        activeTool: this.state.activeTool.type
+      });
+      
+      if (!isPen && gesture.pointers.size === 1 && !isHandToolActive(this.state)) {
+        console.log('Preventing drawing with finger touches - RETURNING EARLY');
         // Prevent drawing with finger touches - only allow stylus/pen
+        // But allow multi-touch for pinch zoom and hand tool
         event.preventDefault();
         return;
       }
@@ -6472,7 +6581,9 @@ class App extends React.Component<AppProps, AppState> {
       this.setAppState({ snapLines: [] });
     }
 
+    console.log('About to call updateGestureOnPointerDown');
     this.updateGestureOnPointerDown(event);
+    console.log('updateGestureOnPointerDown completed');
     
     // If this is the second touch for pinch zoom, immediately switch away from hand tool
     if (this.state.canvasPageSettings?.enabled && 
@@ -7029,9 +7140,20 @@ class App extends React.Component<AppProps, AppState> {
   private updateGestureOnPointerDown(
     event: React.PointerEvent<HTMLElement>,
   ): void {
+    console.log('updateGestureOnPointerDown called:', {
+      pointerId: event.pointerId,
+      pointerType: event.pointerType,
+      currentPointersSize: gesture.pointers.size
+    });
+    
     gesture.pointers.set(event.pointerId, {
       x: event.clientX,
       y: event.clientY,
+    });
+
+    console.log('After adding pointer:', {
+      pointersSize: gesture.pointers.size,
+      pointers: Array.from(gesture.pointers.entries())
     });
 
     if (gesture.pointers.size === 2) {
@@ -7064,11 +7186,17 @@ class App extends React.Component<AppProps, AppState> {
         pointersSize: gesture.pointers.size,
         initialScale: gesture.initialScale,
         initialDistance: gesture.initialDistance,
-        center: gesture.lastCenter
+        center: gesture.lastCenter,
+        pointers: Array.from(gesture.pointers.entries())
       });
       
       // Prevent default behavior to avoid browser zoom
       event.preventDefault();
+    } else if (gesture.pointers.size > 2) {
+      // Reset gesture if more than 2 pointers
+      gesture.lastCenter = null;
+      gesture.initialScale = null;
+      gesture.initialDistance = null;
     }
   }
 

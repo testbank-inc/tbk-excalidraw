@@ -2,11 +2,11 @@ import {
   DEFAULT_TRANSFORM_HANDLE_SPACING,
   isAndroid,
   isIOS,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
-import { pointFrom, pointRotateRads } from "@excalidraw/math";
+import { pointFrom, pointRotateRads } from "@testbank-inc/math";
 
-import type { Radians } from "@excalidraw/math";
+import type { Radians } from "@testbank-inc/math";
 
 import type {
   Device,

@@ -1,18 +1,18 @@
-import { getNonDeletedElements } from "@excalidraw/element";
+import { getNonDeletedElements } from "@testbank-inc/element";
 
-import { isFrameLikeElement } from "@excalidraw/element";
+import { isFrameLikeElement } from "@testbank-inc/element";
 
-import { CODES, KEYS, arrayToMap, getShortcutKey } from "@excalidraw/common";
+import { CODES, KEYS, arrayToMap, getShortcutKey } from "@testbank-inc/common";
 
-import { updateFrameMembershipOfSelectedElements } from "@excalidraw/element";
+import { updateFrameMembershipOfSelectedElements } from "@testbank-inc/element";
 
-import { distributeElements } from "@excalidraw/element";
+import { distributeElements } from "@testbank-inc/element";
 
-import { CaptureUpdateAction } from "@excalidraw/element";
+import { CaptureUpdateAction } from "@testbank-inc/element";
 
 import type { ExcalidrawElement } from "@excalidraw/element/types";
 
-import type { Distribution } from "@excalidraw/element";
+import type { Distribution } from "@testbank-inc/element";
 
 import { ToolButton } from "../components/ToolButton";
 import {

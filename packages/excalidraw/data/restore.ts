@@ -1,4 +1,4 @@
-import { isFiniteNumber, pointFrom } from "@excalidraw/math";
+import { isFiniteNumber, pointFrom } from "@testbank-inc/math";
 
 import {
   DEFAULT_FONT_FAMILY,
@@ -17,17 +17,17 @@ import {
   getSizeFromPoints,
   normalizeLink,
   getLineHeight,
-} from "@excalidraw/common";
-import { getNonDeletedElements, isValidPolygon } from "@excalidraw/element";
-import { normalizeFixedPoint } from "@excalidraw/element";
+} from "@testbank-inc/common";
+import { getNonDeletedElements, isValidPolygon } from "@testbank-inc/element";
+import { normalizeFixedPoint } from "@testbank-inc/element";
 import {
   updateElbowArrowPoints,
   validateElbowPoints,
-} from "@excalidraw/element";
-import { LinearElementEditor } from "@excalidraw/element";
-import { bumpVersion } from "@excalidraw/element";
-import { getContainerElement } from "@excalidraw/element";
-import { detectLineHeight } from "@excalidraw/element";
+} from "@testbank-inc/element";
+import { LinearElementEditor } from "@testbank-inc/element";
+import { bumpVersion } from "@testbank-inc/element";
+import { getContainerElement } from "@testbank-inc/element";
+import { detectLineHeight } from "@testbank-inc/element";
 import {
   isArrowBoundToElement,
   isArrowElement,
@@ -37,17 +37,17 @@ import {
   isLineElement,
   isTextElement,
   isUsingAdaptiveRadius,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import { syncInvalidIndices } from "@excalidraw/element";
+import { syncInvalidIndices } from "@testbank-inc/element";
 
-import { refreshTextDimensions } from "@excalidraw/element";
+import { refreshTextDimensions } from "@testbank-inc/element";
 
-import { getNormalizedDimensions } from "@excalidraw/element";
+import { getNormalizedDimensions } from "@testbank-inc/element";
 
-import { isInvisiblySmallElement } from "@excalidraw/element";
+import { isInvisiblySmallElement } from "@testbank-inc/element";
 
-import type { LocalPoint, Radians } from "@excalidraw/math";
+import type { LocalPoint, Radians } from "@testbank-inc/math";
 
 import type {
   ExcalidrawArrowElement,

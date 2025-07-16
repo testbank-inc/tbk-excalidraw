@@ -1,4 +1,4 @@
-import { arrayToMap, findIndex, findLastIndex } from "@excalidraw/common";
+import { arrayToMap, findIndex, findLastIndex } from "@testbank-inc/common";
 
 import type { AppState } from "@excalidraw/excalidraw/types";
 

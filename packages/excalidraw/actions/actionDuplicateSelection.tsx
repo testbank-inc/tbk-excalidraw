@@ -3,22 +3,22 @@ import {
   KEYS,
   arrayToMap,
   getShortcutKey,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
-import { getNonDeletedElements } from "@excalidraw/element";
+import { getNonDeletedElements } from "@testbank-inc/element";
 
-import { LinearElementEditor } from "@excalidraw/element";
+import { LinearElementEditor } from "@testbank-inc/element";
 
 import {
   getSelectedElements,
   getSelectionStateForElements,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import { syncMovedIndices } from "@excalidraw/element";
+import { syncMovedIndices } from "@testbank-inc/element";
 
-import { duplicateElements } from "@excalidraw/element";
+import { duplicateElements } from "@testbank-inc/element";
 
-import { CaptureUpdateAction } from "@excalidraw/element";
+import { CaptureUpdateAction } from "@testbank-inc/element";
 
 import { ToolButton } from "../components/ToolButton";
 import { DuplicateIcon } from "../components/icons";

@@ -1,14 +1,14 @@
 import { vi } from "vitest";
 
-import { ROUNDNESS, KEYS, arrayToMap, cloneJSON } from "@excalidraw/common";
+import { ROUNDNESS, KEYS, arrayToMap, cloneJSON } from "@testbank-inc/common";
 
-import { pointFrom, type Radians } from "@excalidraw/math";
+import { pointFrom, type Radians } from "@testbank-inc/math";
 
-import { getBoundTextElementPosition } from "@excalidraw/element";
-import { getElementAbsoluteCoords } from "@excalidraw/element";
-import { newLinearElement } from "@excalidraw/element";
+import { getBoundTextElementPosition } from "@testbank-inc/element";
+import { getElementAbsoluteCoords } from "@testbank-inc/element";
+import { newLinearElement } from "@testbank-inc/element";
 
-import type { LocalPoint } from "@excalidraw/math";
+import type { LocalPoint } from "@testbank-inc/math";
 
 import type {
   ExcalidrawElement,

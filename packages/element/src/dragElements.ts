@@ -2,7 +2,7 @@ import {
   TEXT_AUTOWRAP_THRESHOLD,
   getGridPoint,
   getFontString,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import type {
   AppState,

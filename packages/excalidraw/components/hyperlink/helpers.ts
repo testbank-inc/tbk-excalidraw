@@ -1,12 +1,12 @@
-import { pointFrom, pointRotateRads } from "@excalidraw/math";
+import { pointFrom, pointRotateRads } from "@testbank-inc/math";
 
-import { MIME_TYPES } from "@excalidraw/common";
-import { getElementAbsoluteCoords } from "@excalidraw/element";
-import { hitElementBoundingBox } from "@excalidraw/element";
+import { MIME_TYPES } from "@testbank-inc/common";
+import { getElementAbsoluteCoords } from "@testbank-inc/element";
+import { hitElementBoundingBox } from "@testbank-inc/element";
 
-import type { GlobalPoint, Radians } from "@excalidraw/math";
+import type { GlobalPoint, Radians } from "@testbank-inc/math";
 
-import type { Bounds } from "@excalidraw/element";
+import type { Bounds } from "@testbank-inc/element";
 import type {
   ElementsMap,
   NonDeletedExcalidrawElement,

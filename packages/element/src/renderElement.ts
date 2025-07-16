@@ -1,7 +1,7 @@
 import rough from "roughjs/bin/rough";
 import { getStroke } from "perfect-freehand";
 
-import { isRightAngleRads } from "@excalidraw/math";
+import { isRightAngleRads } from "@testbank-inc/math";
 
 import {
   BOUND_TEXT_PADDING,
@@ -14,7 +14,7 @@ import {
   getFontString,
   isRTL,
   getVerticalOffset,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import type {
   AppState,

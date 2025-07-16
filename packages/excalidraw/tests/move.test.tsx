@@ -1,9 +1,9 @@
 import React from "react";
 import { vi } from "vitest";
 
-import { bindOrUnbindLinearElement } from "@excalidraw/element";
+import { bindOrUnbindLinearElement } from "@testbank-inc/element";
 
-import { KEYS, reseed } from "@excalidraw/common";
+import { KEYS, reseed } from "@testbank-inc/common";
 
 import "@excalidraw/utils/test-utils";
 

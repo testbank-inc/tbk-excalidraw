@@ -1,4 +1,4 @@
-import { MIME_TYPES } from "@excalidraw/common";
+import { MIME_TYPES } from "@testbank-inc/common";
 import { getDefaultAppState } from "@excalidraw/excalidraw/appState";
 import {
   copyBlobToClipboardAsPng,

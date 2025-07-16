@@ -1,12 +1,12 @@
 import throttle from "lodash.throttle";
 
-import { arrayToMap, isDevEnv, isTestEnv } from "@excalidraw/common";
+import { arrayToMap, isDevEnv, isTestEnv } from "@testbank-inc/common";
 
 import {
   orderByFractionalIndex,
   syncInvalidIndices,
   validateFractionalIndices,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
 import type { OrderedExcalidrawElement } from "@excalidraw/element/types";
 

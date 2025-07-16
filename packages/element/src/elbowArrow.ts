@@ -11,7 +11,7 @@ import {
   vectorScale,
   type GlobalPoint,
   type LocalPoint,
-} from "@excalidraw/math";
+} from "@testbank-inc/math";
 
 import {
   BinaryHeap,
@@ -21,7 +21,7 @@ import {
   getSizeFromPoints,
   isDevEnv,
   arrayToMap,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import type { AppState } from "@excalidraw/excalidraw/types";
 

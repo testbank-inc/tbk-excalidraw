@@ -1,4 +1,4 @@
-import { round } from "@excalidraw/math";
+import { round } from "@testbank-inc/math";
 import clsx from "clsx";
 import debounce from "lodash.debounce";
 import { Fragment, memo, useEffect, useMemo, useRef, useState } from "react";
@@ -9,21 +9,21 @@ import {
   FONT_FAMILY,
   FRAME_STYLE,
   getLineHeight,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
-import { isElementCompletelyInViewport } from "@excalidraw/element";
+import { isElementCompletelyInViewport } from "@testbank-inc/element";
 
-import { measureText } from "@excalidraw/element";
+import { measureText } from "@testbank-inc/element";
 
 import {
   KEYS,
   randomInteger,
   addEventListener,
   getFontString,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
-import { newTextElement } from "@excalidraw/element";
-import { isTextElement, isFrameLikeElement } from "@excalidraw/element";
+import { newTextElement } from "@testbank-inc/element";
+import { isTextElement, isFrameLikeElement } from "@testbank-inc/element";
 
 import { getDefaultFrameName } from "@excalidraw/element/frame";
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { SVG_NS } from "@excalidraw/common";
+import { SVG_NS } from "@testbank-inc/common";
 
 import type { FileId } from "@excalidraw/element/types";
 

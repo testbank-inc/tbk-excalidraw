@@ -1,5 +1,5 @@
-import { ARROW_TYPE } from "@excalidraw/common";
-import { pointFrom } from "@excalidraw/math";
+import { ARROW_TYPE } from "@testbank-inc/common";
+import { pointFrom } from "@testbank-inc/math";
 import { Excalidraw } from "@excalidraw/excalidraw";
 
 import { actionSelectAll } from "@excalidraw/excalidraw/actions";
@@ -18,7 +18,7 @@ import {
 
 import "@excalidraw/utils/test-utils";
 
-import type { LocalPoint } from "@excalidraw/math";
+import type { LocalPoint } from "@testbank-inc/math";
 
 import { bindLinearElement } from "../src/binding";
 

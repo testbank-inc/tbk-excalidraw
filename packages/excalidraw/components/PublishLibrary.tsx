@@ -9,7 +9,7 @@ import {
   VERSIONS,
   chunk,
   getExportSource,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import { EditorLocalStorage } from "../data/EditorLocalStorage";
 import { canvasToBlob, resizeImageFile } from "../data/blob";

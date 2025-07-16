@@ -1,6 +1,6 @@
-import { syncInvalidIndices } from "@excalidraw/element";
+import { syncInvalidIndices } from "@testbank-inc/element";
 
-import { randomInteger, cloneJSON } from "@excalidraw/common";
+import { randomInteger, cloneJSON } from "@testbank-inc/common";
 
 import type {
   ExcalidrawElement,

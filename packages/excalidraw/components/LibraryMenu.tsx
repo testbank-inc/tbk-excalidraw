@@ -11,7 +11,7 @@ import {
   LIBRARY_DISABLED_TYPES,
   randomId,
   isShallowEqual,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import type {
   ExcalidrawElement,

@@ -1,4 +1,4 @@
-import type { UserIdleState } from "@excalidraw/common";
+import type { UserIdleState } from "@testbank-inc/common";
 import type {
   ExcalidrawElement,
   NonDeletedElementsMap,

@@ -9,7 +9,7 @@ import {
   vectorFromPoint,
   curveLength,
   curvePointAtLength,
-} from "@excalidraw/math";
+} from "@testbank-inc/math";
 
 import { getCurvePathOps } from "@excalidraw/utils/shape";
 
@@ -21,15 +21,15 @@ import {
   invariant,
   tupleToCoors,
   viewportCoordsToSceneCoords,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import {
   deconstructLinearOrFreeDrawElement,
   isPathALoop,
   type Store,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import type { Radians } from "@excalidraw/math";
+import type { Radians } from "@testbank-inc/math";
 
 import type {
   AppState,

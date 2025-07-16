@@ -5,7 +5,7 @@ import {
   CLASSES,
   DEFAULT_SIDEBAR,
   KEYS,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import type {
   ExcalidrawFrameLikeElement,

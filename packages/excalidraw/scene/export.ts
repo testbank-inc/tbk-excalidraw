@@ -13,33 +13,33 @@ import {
   distance,
   getFontString,
   toBrandedType,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
-import { getCommonBounds, getElementAbsoluteCoords } from "@excalidraw/element";
+import { getCommonBounds, getElementAbsoluteCoords } from "@testbank-inc/element";
 
 import {
   getInitializedImageElements,
   updateImageCache,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import { newElementWith } from "@excalidraw/element";
+import { newElementWith } from "@testbank-inc/element";
 
-import { isFrameLikeElement } from "@excalidraw/element";
+import { isFrameLikeElement } from "@testbank-inc/element";
 
 import {
   getElementsOverlappingFrame,
   getFrameLikeElements,
   getFrameLikeTitle,
   getRootElements,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import { syncInvalidIndices } from "@excalidraw/element";
+import { syncInvalidIndices } from "@testbank-inc/element";
 
 import { type Mutable } from "@excalidraw/common/utility-types";
 
-import { newTextElement } from "@excalidraw/element";
+import { newTextElement } from "@testbank-inc/element";
 
-import type { Bounds } from "@excalidraw/element";
+import type { Bounds } from "@testbank-inc/element";
 
 import type {
   ExcalidrawElement,

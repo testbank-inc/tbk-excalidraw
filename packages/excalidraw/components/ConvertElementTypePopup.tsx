@@ -3,9 +3,9 @@ import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import {
   getLinearElementSubType,
   updateElbowArrowPoints,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import { pointFrom, pointRotateRads, type LocalPoint } from "@excalidraw/math";
+import { pointFrom, pointRotateRads, type LocalPoint } from "@testbank-inc/math";
 
 import {
   hasBoundTextElement,
@@ -14,21 +14,21 @@ import {
   isElbowArrow,
   isLinearElement,
   isUsingAdaptiveRadius,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
 import {
   getCommonBoundingBox,
   getElementAbsoluteCoords,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
 import {
   getBoundTextElement,
   getBoundTextMaxHeight,
   getBoundTextMaxWidth,
   redrawTextBoundingBox,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import { wrapText } from "@excalidraw/element";
+import { wrapText } from "@testbank-inc/element";
 
 import {
   assertNever,
@@ -38,21 +38,21 @@ import {
   mapFind,
   reduceToCommonValue,
   updateActiveTool,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
-import { measureText } from "@excalidraw/element";
+import { measureText } from "@testbank-inc/element";
 
-import { LinearElementEditor } from "@excalidraw/element";
+import { LinearElementEditor } from "@testbank-inc/element";
 
 import {
   newArrowElement,
   newElement,
   newLinearElement,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import { ShapeCache } from "@excalidraw/element";
+import { ShapeCache } from "@testbank-inc/element";
 
-import { updateBindings } from "@excalidraw/element";
+import { updateBindings } from "@testbank-inc/element";
 
 import type {
   ConvertibleGenericTypes,
@@ -69,7 +69,7 @@ import type {
   FixedSegment,
 } from "@excalidraw/element/types";
 
-import type { Scene } from "@excalidraw/element";
+import type { Scene } from "@testbank-inc/element";
 
 import {
   bumpVersion,

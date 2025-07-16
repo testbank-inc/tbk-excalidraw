@@ -9,9 +9,9 @@ import {
 } from "@testing-library/react";
 import ansi from "ansicolor";
 
-import { ORIG_ID, arrayToMap } from "@excalidraw/common";
+import { ORIG_ID, arrayToMap } from "@testbank-inc/common";
 
-import { getSelectedElements } from "@excalidraw/element";
+import { getSelectedElements } from "@testbank-inc/element";
 
 import type { ExcalidrawElement } from "@excalidraw/element/types";
 

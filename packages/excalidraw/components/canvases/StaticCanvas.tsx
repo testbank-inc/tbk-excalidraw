@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
-import { isShallowEqual } from "@excalidraw/common";
+import { isShallowEqual } from "@testbank-inc/common";
 
 import type {
   NonDeletedExcalidrawElement,

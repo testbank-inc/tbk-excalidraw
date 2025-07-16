@@ -3,7 +3,7 @@ import {
   VERTICAL_ALIGN,
   escapeDoubleQuotes,
   getFontString,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import type { ExcalidrawProps } from "@excalidraw/excalidraw/types";
 import type { MarkRequired } from "@excalidraw/common/utility-types";

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useDeferredValue } from "react";
 
-import { EDITOR_LS_KEYS, debounce, isDevEnv } from "@excalidraw/common";
+import { EDITOR_LS_KEYS, debounce, isDevEnv } from "@testbank-inc/common";
 
 import type { NonDeletedExcalidrawElement } from "@excalidraw/element/types";
 

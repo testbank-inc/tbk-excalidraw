@@ -1,8 +1,8 @@
-import { getNonDeletedElements } from "@excalidraw/element";
+import { getNonDeletedElements } from "@testbank-inc/element";
 
-import { newElementWith } from "@excalidraw/element";
+import { newElementWith } from "@testbank-inc/element";
 
-import { isBoundToContainer } from "@excalidraw/element";
+import { isBoundToContainer } from "@testbank-inc/element";
 
 import {
   frameAndChildrenSelectedTogether,
@@ -12,9 +12,9 @@ import {
   groupByFrameLikes,
   removeElementsFromFrame,
   replaceAllElementsInFrame,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import { KEYS, randomId, arrayToMap, getShortcutKey } from "@excalidraw/common";
+import { KEYS, randomId, arrayToMap, getShortcutKey } from "@testbank-inc/common";
 
 import {
   getSelectedGroupIds,
@@ -24,11 +24,11 @@ import {
   addToGroup,
   removeFromSelectedGroups,
   isElementInGroup,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import { syncMovedIndices } from "@excalidraw/element";
+import { syncMovedIndices } from "@testbank-inc/element";
 
-import { CaptureUpdateAction } from "@excalidraw/element";
+import { CaptureUpdateAction } from "@testbank-inc/element";
 
 import type {
   ExcalidrawElement,

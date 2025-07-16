@@ -1,6 +1,6 @@
 import { exportToCanvas, exportToSvg } from "@excalidraw/utils";
 
-import { FONT_FAMILY, FRAME_STYLE } from "@excalidraw/common";
+import { FONT_FAMILY, FRAME_STYLE } from "@testbank-inc/common";
 
 import type {
   ExcalidrawTextElement,

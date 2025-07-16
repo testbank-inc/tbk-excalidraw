@@ -8,13 +8,13 @@ import {
   arrayToMap,
   capitalizeString,
   isShallowEqual,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
-import { mutateElement } from "@excalidraw/element";
+import { mutateElement } from "@testbank-inc/element";
 
-import { showSelectedShapeActions } from "@excalidraw/element";
+import { showSelectedShapeActions } from "@testbank-inc/element";
 
-import { ShapeCache } from "@excalidraw/element";
+import { ShapeCache } from "@testbank-inc/element";
 
 import type { NonDeletedExcalidrawElement } from "@excalidraw/element/types";
 

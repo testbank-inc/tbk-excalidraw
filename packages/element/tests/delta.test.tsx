@@ -1,5 +1,5 @@
 import type { ObservedAppState } from "@excalidraw/excalidraw/types";
-import type { LinearElementEditor } from "@excalidraw/element";
+import type { LinearElementEditor } from "@testbank-inc/element";
 
 import { AppStateDelta } from "../src/delta";
 

@@ -14,18 +14,18 @@ import {
   pointDistance,
   type LocalPoint,
   pointRotateRads,
-} from "@excalidraw/math";
+} from "@testbank-inc/math";
 import {
   ROUGHNESS,
   isTransparent,
   assertNever,
   COLOR_PALETTE,
   LINE_POLYGON_POINT_MERGE_DISTANCE,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import { RoughGenerator } from "roughjs/bin/generator";
 
-import type { GlobalPoint } from "@excalidraw/math";
+import type { GlobalPoint } from "@testbank-inc/math";
 
 import type { Mutable } from "@excalidraw/common/utility-types";
 

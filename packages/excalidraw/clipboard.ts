@@ -5,16 +5,16 @@ import {
   arrayToMap,
   isMemberOf,
   isPromiseLike,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
-import { mutateElement } from "@excalidraw/element";
-import { deepCopyElement } from "@excalidraw/element";
+import { mutateElement } from "@testbank-inc/element";
+import { deepCopyElement } from "@testbank-inc/element";
 import {
   isFrameLikeElement,
   isInitializedImageElement,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import { getContainingFrame } from "@excalidraw/element";
+import { getContainingFrame } from "@testbank-inc/element";
 
 import type {
   ExcalidrawElement,

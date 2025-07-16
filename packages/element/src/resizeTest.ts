@@ -3,11 +3,11 @@ import {
   pointOnLineSegment,
   pointRotateRads,
   type Radians,
-} from "@excalidraw/math";
+} from "@testbank-inc/math";
 
-import { SIDE_RESIZING_THRESHOLD } from "@excalidraw/common";
+import { SIDE_RESIZING_THRESHOLD } from "@testbank-inc/common";
 
-import type { GlobalPoint, LineSegment, LocalPoint } from "@excalidraw/math";
+import type { GlobalPoint, LineSegment, LocalPoint } from "@testbank-inc/math";
 
 import type { AppState, Device, Zoom } from "@excalidraw/excalidraw/types";
 

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
-import { EVENT, KEYS, rgbToHex } from "@excalidraw/common";
+import { EVENT, KEYS, rgbToHex } from "@testbank-inc/common";
 
 import type { ExcalidrawElement } from "@excalidraw/element/types";
 

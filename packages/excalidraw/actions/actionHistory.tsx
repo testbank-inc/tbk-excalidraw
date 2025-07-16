@@ -1,8 +1,8 @@
-import { isWindows, KEYS, matchKey, arrayToMap } from "@excalidraw/common";
+import { isWindows, KEYS, matchKey, arrayToMap } from "@testbank-inc/common";
 
-import { CaptureUpdateAction } from "@excalidraw/element";
+import { CaptureUpdateAction } from "@testbank-inc/element";
 
-import { orderByFractionalIndex } from "@excalidraw/element";
+import { orderByFractionalIndex } from "@testbank-inc/element";
 
 import type { SceneElementsMap } from "@excalidraw/element/types";
 

@@ -1,4 +1,4 @@
-import { average } from "@excalidraw/math";
+import { average } from "@testbank-inc/math";
 
 import type {
   ExcalidrawBindableElement,

@@ -1,4 +1,4 @@
-import { pointFrom } from "@excalidraw/math";
+import { pointFrom } from "@testbank-inc/math";
 import { vi } from "vitest";
 
 import type { ExcalidrawArrowElement } from "@excalidraw/element/types";

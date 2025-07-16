@@ -1,4 +1,4 @@
-import { arrayToMap, isShallowEqual } from "@excalidraw/common";
+import { arrayToMap, isShallowEqual } from "@testbank-inc/common";
 
 import type {
   AppState,

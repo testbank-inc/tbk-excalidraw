@@ -1,11 +1,11 @@
-import { pointFrom, pointRotateRads } from "@excalidraw/math";
+import { pointFrom, pointRotateRads } from "@testbank-inc/math";
 
 import {
   elementCenterPoint,
   getCommonBounds,
   getElementPointsCoords,
-} from "@excalidraw/element";
-import { cropElement } from "@excalidraw/element";
+} from "@testbank-inc/element";
+import { cropElement } from "@testbank-inc/element";
 import {
   getTransformHandles,
   getTransformHandlesFromCoords,
@@ -13,18 +13,18 @@ import {
   OMIT_SIDES_FOR_MULTIPLE_ELEMENTS,
   type TransformHandle,
   type TransformHandleDirection,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 import {
   isLinearElement,
   isFreeDrawElement,
   isTextElement,
   isFrameLikeElement,
-} from "@excalidraw/element";
-import { KEYS, arrayToMap } from "@excalidraw/common";
+} from "@testbank-inc/element";
+import { KEYS, arrayToMap } from "@testbank-inc/common";
 
-import type { GlobalPoint, LocalPoint, Radians } from "@excalidraw/math";
+import type { GlobalPoint, LocalPoint, Radians } from "@testbank-inc/math";
 
-import type { TransformHandleType } from "@excalidraw/element";
+import type { TransformHandleType } from "@testbank-inc/element";
 import type {
   ExcalidrawElement,
   ExcalidrawLinearElement,

@@ -5,9 +5,9 @@ import {
   CODES,
   KEYS,
   getLineHeight,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
-import { newElementWith } from "@excalidraw/element";
+import { newElementWith } from "@testbank-inc/element";
 
 import {
   hasBoundTextElement,
@@ -17,14 +17,14 @@ import {
   isArrowElement,
   isExcalidrawElement,
   isTextElement,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
 import {
   getBoundTextElement,
   redrawTextBoundingBox,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import { CaptureUpdateAction } from "@excalidraw/element";
+import { CaptureUpdateAction } from "@testbank-inc/element";
 
 import type { ExcalidrawTextElement } from "@excalidraw/element/types";
 

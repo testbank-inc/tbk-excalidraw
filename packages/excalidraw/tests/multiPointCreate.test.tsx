@@ -1,7 +1,7 @@
 import React from "react";
 import { vi } from "vitest";
 
-import { KEYS, reseed } from "@excalidraw/common";
+import { KEYS, reseed } from "@testbank-inc/common";
 
 import type { ExcalidrawLinearElement } from "@excalidraw/element/types";
 

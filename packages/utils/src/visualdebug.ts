@@ -4,14 +4,14 @@ import {
   pointFrom,
   type GlobalPoint,
   type LocalPoint,
-} from "@excalidraw/math";
+} from "@testbank-inc/math";
 
-import { isBounds } from "@excalidraw/element";
+import { isBounds } from "@testbank-inc/element";
 
-import type { Curve } from "@excalidraw/math";
+import type { Curve } from "@testbank-inc/math";
 import type { LineSegment } from "@excalidraw/utils";
 
-import type { Bounds } from "@excalidraw/element";
+import type { Bounds } from "@testbank-inc/element";
 
 // The global data holder to collect the debug operations
 declare global {

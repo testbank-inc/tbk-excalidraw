@@ -4,7 +4,7 @@ import {
   type GlobalPoint,
   type LocalPoint,
   type Radians,
-} from "@excalidraw/math";
+} from "@testbank-inc/math";
 import oc from "open-color";
 
 import {
@@ -14,16 +14,16 @@ import {
   invariant,
   THEME,
   throttleRAF,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
-import { FIXED_BINDING_DISTANCE, maxBindingGap } from "@excalidraw/element";
-import { LinearElementEditor } from "@excalidraw/element";
+import { FIXED_BINDING_DISTANCE, maxBindingGap } from "@testbank-inc/element";
+import { LinearElementEditor } from "@testbank-inc/element";
 import {
   getOmitSidesForDevice,
   getTransformHandles,
   getTransformHandlesFromCoords,
   shouldShowBoundingBox,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 import {
   isElbowArrow,
   isFrameLikeElement,
@@ -31,28 +31,28 @@ import {
   isLinearElement,
   isLineElement,
   isTextElement,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import { renderSelectionElement } from "@excalidraw/element";
+import { renderSelectionElement } from "@testbank-inc/element";
 
 import {
   getElementsInGroup,
   getSelectedGroupIds,
   isSelectedViaGroup,
   selectGroupsFromGivenElements,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import { getCommonBounds, getElementAbsoluteCoords } from "@excalidraw/element";
+import { getCommonBounds, getElementAbsoluteCoords } from "@testbank-inc/element";
 
 import type {
   SuggestedBinding,
   SuggestedPointBinding,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
 import type {
   TransformHandles,
   TransformHandleType,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
 import type {
   ElementsMap,

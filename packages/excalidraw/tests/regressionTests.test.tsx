@@ -1,9 +1,9 @@
 import React from "react";
 import { vi } from "vitest";
 
-import { FONT_FAMILY, CODES, KEYS, reseed } from "@excalidraw/common";
+import { FONT_FAMILY, CODES, KEYS, reseed } from "@testbank-inc/common";
 
-import { setDateTimeForTests } from "@excalidraw/common";
+import { setDateTimeForTests } from "@testbank-inc/common";
 
 import type { ExcalidrawElement } from "@excalidraw/element/types";
 

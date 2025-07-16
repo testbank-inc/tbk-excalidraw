@@ -5,27 +5,27 @@ import {
   rangeIntersection,
   rangesOverlap,
   type GlobalPoint,
-} from "@excalidraw/math";
+} from "@testbank-inc/math";
 
-import { TOOL_TYPE, KEYS } from "@excalidraw/common";
+import { TOOL_TYPE, KEYS } from "@testbank-inc/common";
 import {
   getCommonBounds,
   getDraggedElementsBounds,
   getElementAbsoluteCoords,
-} from "@excalidraw/element";
-import { isBoundToContainer, isFrameLikeElement } from "@excalidraw/element";
+} from "@testbank-inc/element";
+import { isBoundToContainer, isFrameLikeElement } from "@testbank-inc/element";
 
-import { getMaximumGroups } from "@excalidraw/element";
+import { getMaximumGroups } from "@testbank-inc/element";
 
 import {
   getSelectedElements,
   getVisibleAndNonSelectedElements,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import type { InclusiveRange } from "@excalidraw/math";
+import type { InclusiveRange } from "@testbank-inc/math";
 
-import type { Bounds } from "@excalidraw/element";
-import type { MaybeTransformHandleType } from "@excalidraw/element";
+import type { Bounds } from "@testbank-inc/element";
+import type { MaybeTransformHandleType } from "@testbank-inc/element";
 import type {
   ElementsMap,
   ExcalidrawElement,

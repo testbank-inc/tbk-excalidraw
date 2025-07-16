@@ -6,7 +6,7 @@ import {
   isShallowEqual,
   isTestEnv,
   randomInteger,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import type {
   ExcalidrawElement,

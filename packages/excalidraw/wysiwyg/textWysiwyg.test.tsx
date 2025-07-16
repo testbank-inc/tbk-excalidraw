@@ -1,7 +1,7 @@
 import { queryByText } from "@testing-library/react";
 
-import { pointFrom } from "@excalidraw/math";
-import { getOriginalContainerHeightFromCache } from "@excalidraw/element";
+import { pointFrom } from "@testbank-inc/math";
+import { getOriginalContainerHeightFromCache } from "@testbank-inc/element";
 
 import {
   CODES,
@@ -9,7 +9,7 @@ import {
   FONT_FAMILY,
   TEXT_ALIGN,
   VERTICAL_ALIGN,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import type {
   ExcalidrawTextElement,

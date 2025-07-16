@@ -4,7 +4,7 @@ import {
   polygonFromPoints,
   lineSegment,
   polygonIncludesPointNonZero,
-} from "@excalidraw/math";
+} from "@testbank-inc/math";
 
 import {
   type Bounds,
@@ -13,7 +13,7 @@ import {
   getBoundTextElement,
   getElementBounds,
   intersectElementWithLineSegment,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
 import type { ElementsSegmentsMap, GlobalPoint } from "@excalidraw/math/types";
 import type { ElementsMap, ExcalidrawElement } from "@excalidraw/element/types";

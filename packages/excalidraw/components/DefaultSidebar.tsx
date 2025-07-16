@@ -5,7 +5,7 @@ import {
   DEFAULT_SIDEBAR,
   LIBRARY_SIDEBAR_TAB,
   composeEventHandlers,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import type { MarkOptional, Merge } from "@excalidraw/common/utility-types";
 

@@ -1,5 +1,5 @@
-import { arrayToMap } from "@excalidraw/common";
-import { isPointWithinBounds, pointFrom } from "@excalidraw/math";
+import { arrayToMap } from "@testbank-inc/common";
+import { isPointWithinBounds, pointFrom } from "@testbank-inc/math";
 import { doLineSegmentsIntersect } from "@excalidraw/utils/bbox";
 import { elementsOverlappingBBox } from "@excalidraw/utils/withinBounds";
 

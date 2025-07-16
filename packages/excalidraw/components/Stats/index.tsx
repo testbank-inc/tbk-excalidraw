@@ -1,16 +1,16 @@
-import { round } from "@excalidraw/math";
+import { round } from "@testbank-inc/math";
 import clsx from "clsx";
 import throttle from "lodash.throttle";
 import { useEffect, useMemo, useState, memo } from "react";
 
-import { STATS_PANELS } from "@excalidraw/common";
-import { getCommonBounds } from "@excalidraw/element";
-import { getUncroppedWidthAndHeight } from "@excalidraw/element";
-import { isElbowArrow, isImageElement } from "@excalidraw/element";
+import { STATS_PANELS } from "@testbank-inc/common";
+import { getCommonBounds } from "@testbank-inc/element";
+import { getUncroppedWidthAndHeight } from "@testbank-inc/element";
+import { isElbowArrow, isImageElement } from "@testbank-inc/element";
 
-import { frameAndChildrenSelectedTogether } from "@excalidraw/element";
+import { frameAndChildrenSelectedTogether } from "@testbank-inc/element";
 
-import { elementsAreInSameGroup } from "@excalidraw/element";
+import { elementsAreInSameGroup } from "@testbank-inc/element";
 
 import type { NonDeletedExcalidrawElement } from "@excalidraw/element/types";
 

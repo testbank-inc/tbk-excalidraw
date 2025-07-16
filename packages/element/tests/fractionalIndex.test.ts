@@ -1,15 +1,15 @@
 /* eslint-disable no-lone-blocks */
 import { generateKeyBetween } from "fractional-indexing";
 
-import { arrayToMap } from "@excalidraw/common";
+import { arrayToMap } from "@testbank-inc/common";
 
 import {
   syncInvalidIndices,
   syncMovedIndices,
   validateFractionalIndices,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import { deepCopyElement } from "@excalidraw/element";
+import { deepCopyElement } from "@testbank-inc/element";
 
 import { API } from "@excalidraw/excalidraw/tests/helpers/api";
 

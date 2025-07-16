@@ -1,6 +1,6 @@
 import React from "react";
 
-import { EXPORT_DATA_TYPES, MIME_TYPES } from "@excalidraw/common";
+import { EXPORT_DATA_TYPES, MIME_TYPES } from "@testbank-inc/common";
 
 import type { ExcalidrawTextElement } from "@excalidraw/element/types";
 

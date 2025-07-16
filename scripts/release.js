@@ -110,11 +110,11 @@ const updatePackageJsons = (nextVersion) => {
 
     if (pkg.dependencies) {
       for (const dependencyName of PACKAGES) {
-        if (!pkg.dependencies[`@excalidraw/${dependencyName}`]) {
+        if (!pkg.dependencies[`@testbank-inc/${dependencyName}`]) {
           continue;
         }
 
-        pkg.dependencies[`@excalidraw/${dependencyName}`] = nextVersion;
+        pkg.dependencies[`@testbank-inc/${dependencyName}`] = nextVersion;
       }
     }
 
@@ -151,7 +151,7 @@ const askToCommit = (tag, nextVersion) => {
         if (answer.toLowerCase() === "y") {
           execSync(`git add -u`);
           execSync(
-            `git commit -m "chore: release @excalidraw/excalidraw@${nextVersion} 🎉"`,
+            `git commit -m "chore: release @testbank-inc/excalidraw@${nextVersion} 🎉"`,
           );
         } else {
           console.warn(
@@ -213,7 +213,7 @@ const publishPackages = (tag, version) => {
     });
 
     console.info(
-      `Published "@excalidraw/${packageName}@${tag}" with version "${version}"! 🎉`,
+      `Published "@testbank-inc/${packageName}@${tag}" with version "${version}"! 🎉`,
     );
   }
 };

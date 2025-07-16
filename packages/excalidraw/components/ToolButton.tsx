@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import React, { useEffect, useRef, useState } from "react";
 
-import { isPromiseLike } from "@excalidraw/common";
+import { isPromiseLike } from "@testbank-inc/common";
 
 import type { PointerType } from "@excalidraw/element/types";
 

@@ -1,17 +1,17 @@
-import { arrayToMap, easeOut, THEME } from "@excalidraw/common";
+import { arrayToMap, easeOut, THEME } from "@testbank-inc/common";
 import {
   computeBoundTextPosition,
   getBoundTextElement,
   intersectElementWithLineSegment,
   isPointInElement,
-} from "@excalidraw/element";
-import { lineSegment, pointFrom } from "@excalidraw/math";
+} from "@testbank-inc/element";
+import { lineSegment, pointFrom } from "@testbank-inc/math";
 
-import { getElementsInGroup } from "@excalidraw/element";
+import { getElementsInGroup } from "@testbank-inc/element";
 
-import { shouldTestInside } from "@excalidraw/element";
-import { hasBoundTextElement, isBoundToContainer } from "@excalidraw/element";
-import { getBoundTextElementId } from "@excalidraw/element";
+import { shouldTestInside } from "@testbank-inc/element";
+import { hasBoundTextElement, isBoundToContainer } from "@testbank-inc/element";
+import { getBoundTextElementId } from "@testbank-inc/element";
 
 import type { GlobalPoint, LineSegment } from "@excalidraw/math/types";
 import type { ElementsMap, ExcalidrawElement } from "@excalidraw/element/types";

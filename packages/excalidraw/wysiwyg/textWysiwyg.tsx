@@ -7,15 +7,15 @@ import {
   getFontString,
   getFontFamilyString,
   isTestEnv,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import {
   originalContainerCache,
   updateOriginalContainerCache,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import { LinearElementEditor } from "@excalidraw/element";
-import { bumpVersion } from "@excalidraw/element";
+import { LinearElementEditor } from "@testbank-inc/element";
+import { bumpVersion } from "@testbank-inc/element";
 import {
   getBoundTextElementId,
   getContainerElement,
@@ -26,15 +26,15 @@ import {
   computeContainerDimensionForBoundText,
   computeBoundTextPosition,
   getBoundTextElement,
-} from "@excalidraw/element";
-import { getTextWidth } from "@excalidraw/element";
-import { normalizeText } from "@excalidraw/element";
-import { wrapText } from "@excalidraw/element";
+} from "@testbank-inc/element";
+import { getTextWidth } from "@testbank-inc/element";
+import { normalizeText } from "@testbank-inc/element";
+import { wrapText } from "@testbank-inc/element";
 import {
   isArrowElement,
   isBoundToContainer,
   isTextElement,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
 import type {
   ExcalidrawElement,

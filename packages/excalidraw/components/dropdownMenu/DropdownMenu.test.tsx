@@ -1,6 +1,6 @@
 import React from "react";
 
-import { KEYS } from "@excalidraw/common";
+import { KEYS } from "@testbank-inc/common";
 
 import { Excalidraw } from "../../index";
 import { Keyboard } from "../../tests/helpers/ui";

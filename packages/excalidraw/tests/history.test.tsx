@@ -6,9 +6,9 @@ import {
   waitFor,
 } from "@testing-library/react";
 import { vi } from "vitest";
-import { pointFrom } from "@excalidraw/math";
+import { pointFrom } from "@testbank-inc/math";
 
-import { newElementWith } from "@excalidraw/element";
+import { newElementWith } from "@testbank-inc/element";
 
 import {
   EXPORT_DATA_TYPES,
@@ -20,15 +20,15 @@ import {
   DEFAULT_ELEMENT_BACKGROUND_COLOR_INDEX,
   DEFAULT_ELEMENT_STROKE_COLOR_INDEX,
   reseed,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import "@excalidraw/utils/test-utils";
 
-import { ElementsDelta, AppStateDelta } from "@excalidraw/element";
+import { ElementsDelta, AppStateDelta } from "@testbank-inc/element";
 
-import { CaptureUpdateAction, StoreDelta } from "@excalidraw/element";
+import { CaptureUpdateAction, StoreDelta } from "@testbank-inc/element";
 
-import type { LocalPoint, Radians } from "@excalidraw/math";
+import type { LocalPoint, Radians } from "@testbank-inc/math";
 
 import type {
   ExcalidrawElbowArrowElement,

@@ -3,7 +3,7 @@ import {
   DEFAULT_PROPORTIONAL_RADIUS,
   LINE_CONFIRM_THRESHOLD,
   ROUNDNESS,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import {
   curve,
@@ -15,9 +15,9 @@ import {
   pointFromArray,
   rectangle,
   type GlobalPoint,
-} from "@excalidraw/math";
+} from "@testbank-inc/math";
 
-import type { Curve, LineSegment, LocalPoint } from "@excalidraw/math";
+import type { Curve, LineSegment, LocalPoint } from "@testbank-inc/math";
 
 import type { NormalizedZoomValue, Zoom } from "@excalidraw/excalidraw/types";
 

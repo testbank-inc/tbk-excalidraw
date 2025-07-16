@@ -1,32 +1,32 @@
-import { pointFrom } from "@excalidraw/math";
+import { pointFrom } from "@testbank-inc/math";
 
 import {
   maybeBindLinearElement,
   bindOrUnbindLinearElement,
   isBindingEnabled,
 } from "@excalidraw/element/binding";
-import { isValidPolygon, LinearElementEditor } from "@excalidraw/element";
+import { isValidPolygon, LinearElementEditor } from "@testbank-inc/element";
 
 import {
   isBindingElement,
   isFreeDrawElement,
   isLinearElement,
   isLineElement,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
 import {
   KEYS,
   arrayToMap,
   tupleToCoors,
   updateActiveTool,
-} from "@excalidraw/common";
-import { isPathALoop } from "@excalidraw/element";
+} from "@testbank-inc/common";
+import { isPathALoop } from "@testbank-inc/element";
 
-import { isInvisiblySmallElement } from "@excalidraw/element";
+import { isInvisiblySmallElement } from "@testbank-inc/element";
 
-import { CaptureUpdateAction } from "@excalidraw/element";
+import { CaptureUpdateAction } from "@testbank-inc/element";
 
-import type { LocalPoint } from "@excalidraw/math";
+import type { LocalPoint } from "@testbank-inc/math";
 import type {
   ExcalidrawElement,
   ExcalidrawLinearElement,

@@ -5,9 +5,9 @@ import {
   MIME_TYPES,
   bytesToHexString,
   isPromiseLike,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
-import { clearElementsForExport } from "@excalidraw/element";
+import { clearElementsForExport } from "@testbank-inc/element";
 
 import type { ValueOf } from "@excalidraw/common/utility-types";
 import type { ExcalidrawElement, FileId } from "@excalidraw/element/types";

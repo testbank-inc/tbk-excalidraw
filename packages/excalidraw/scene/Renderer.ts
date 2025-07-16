@@ -1,6 +1,6 @@
-import { isElementInViewport } from "@excalidraw/element";
+import { isElementInViewport } from "@testbank-inc/element";
 
-import { memoize, toBrandedType } from "@excalidraw/common";
+import { memoize, toBrandedType } from "@testbank-inc/common";
 
 import type {
   ExcalidrawElement,
@@ -8,7 +8,7 @@ import type {
   NonDeletedExcalidrawElement,
 } from "@excalidraw/element/types";
 
-import type { Scene } from "@excalidraw/element";
+import type { Scene } from "@testbank-inc/element";
 
 import { renderInteractiveSceneThrottled } from "../renderer/interactiveScene";
 import { renderStaticSceneThrottled } from "../renderer/staticScene";

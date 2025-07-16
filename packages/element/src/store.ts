@@ -6,7 +6,7 @@ import {
   randomId,
   Emitter,
   toIterable,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import type App from "@excalidraw/excalidraw/components/App";
 

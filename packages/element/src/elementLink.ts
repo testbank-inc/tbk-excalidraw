@@ -2,7 +2,7 @@
  * Create and link between shapes.
  */
 
-import { ELEMENT_LINK_KEY, normalizeLink } from "@excalidraw/common";
+import { ELEMENT_LINK_KEY, normalizeLink } from "@testbank-inc/common";
 
 import type { AppProps, AppState } from "@excalidraw/excalidraw/types";
 

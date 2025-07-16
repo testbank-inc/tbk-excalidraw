@@ -4,7 +4,7 @@ import {
   CURSOR_TYPE,
   isShallowEqual,
   sceneCoordsToViewportCoords,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import type {
   NonDeletedExcalidrawElement,

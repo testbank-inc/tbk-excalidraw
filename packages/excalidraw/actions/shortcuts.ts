@@ -1,4 +1,4 @@
-import { isDarwin, getShortcutKey } from "@excalidraw/common";
+import { isDarwin, getShortcutKey } from "@testbank-inc/common";
 
 import type { SubtypeOf } from "@excalidraw/common/utility-types";
 

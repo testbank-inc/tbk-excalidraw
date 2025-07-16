@@ -4,12 +4,12 @@ import {
   getExportSource,
   MIME_TYPES,
   VERSIONS,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import {
   clearElementsForDatabase,
   clearElementsForExport,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
 import type { ExcalidrawElement } from "@excalidraw/element/types";
 

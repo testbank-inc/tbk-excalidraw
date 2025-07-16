@@ -6,9 +6,9 @@ import {
   COLOR_OUTLINE_CONTRAST_THRESHOLD,
   COLOR_PALETTE,
   isTransparent,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
-import type { ColorTuple, ColorPaletteCustom } from "@excalidraw/common";
+import type { ColorTuple, ColorPaletteCustom } from "@testbank-inc/common";
 
 import type { ExcalidrawElement } from "@excalidraw/element/types";
 

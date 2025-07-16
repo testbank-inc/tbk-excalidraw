@@ -1,6 +1,6 @@
-import { KEYS, arrayToMap } from "@excalidraw/common";
+import { KEYS, arrayToMap } from "@testbank-inc/common";
 
-import { pointFrom } from "@excalidraw/math";
+import { pointFrom } from "@testbank-inc/math";
 
 import { actionWrapTextInContainer } from "@excalidraw/excalidraw/actions/actionBoundText";
 

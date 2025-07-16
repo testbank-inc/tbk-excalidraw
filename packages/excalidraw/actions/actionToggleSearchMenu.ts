@@ -3,9 +3,9 @@ import {
   CANVAS_SEARCH_TAB,
   CLASSES,
   DEFAULT_SIDEBAR,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
-import { CaptureUpdateAction } from "@excalidraw/element";
+import { CaptureUpdateAction } from "@testbank-inc/element";
 
 import { searchIcon } from "../components/icons";
 

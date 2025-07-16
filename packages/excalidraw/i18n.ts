@@ -1,4 +1,4 @@
-import { isDevEnv } from "@excalidraw/common";
+import { isDevEnv } from "@testbank-inc/common";
 
 import type { NestedKeyOf } from "@excalidraw/common/utility-types";
 

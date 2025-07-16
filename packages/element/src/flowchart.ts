@@ -1,6 +1,6 @@
-import { KEYS, invariant, toBrandedType } from "@excalidraw/common";
+import { KEYS, invariant, toBrandedType } from "@testbank-inc/common";
 
-import { type GlobalPoint, pointFrom, type LocalPoint } from "@excalidraw/math";
+import { type GlobalPoint, pointFrom, type LocalPoint } from "@testbank-inc/math";
 
 import type {
   AppState,

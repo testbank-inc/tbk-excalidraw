@@ -1,6 +1,6 @@
 import React from "react";
 
-import { isPromiseLike } from "@excalidraw/common";
+import { isPromiseLike } from "@testbank-inc/common";
 
 import type {
   ExcalidrawElement,

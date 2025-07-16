@@ -7,7 +7,7 @@ import {
   findLastIndex,
   getUpdatedTimestamp,
   isTestEnv,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import type { Mutable } from "@excalidraw/common/utility-types";
 

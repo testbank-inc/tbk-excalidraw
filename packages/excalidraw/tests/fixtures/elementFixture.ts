@@ -1,6 +1,6 @@
-import { DEFAULT_FONT_FAMILY } from "@excalidraw/common";
+import { DEFAULT_FONT_FAMILY } from "@testbank-inc/common";
 
-import type { Radians } from "@excalidraw/math";
+import type { Radians } from "@testbank-inc/math";
 
 import type { ExcalidrawElement } from "@excalidraw/element/types";
 

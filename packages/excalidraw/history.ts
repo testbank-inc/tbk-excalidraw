@@ -1,12 +1,12 @@
-import { Emitter } from "@excalidraw/common";
+import { Emitter } from "@testbank-inc/common";
 
 import {
   CaptureUpdateAction,
   StoreChange,
   StoreDelta,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import type { StoreSnapshot, Store } from "@excalidraw/element";
+import type { StoreSnapshot, Store } from "@testbank-inc/element";
 
 import type { SceneElementsMap } from "@excalidraw/element/types";
 

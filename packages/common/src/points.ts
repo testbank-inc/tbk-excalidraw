@@ -2,7 +2,7 @@ import {
   pointFromPair,
   type GlobalPoint,
   type LocalPoint,
-} from "@excalidraw/math";
+} from "@testbank-inc/math";
 
 import type { NullableGridSize } from "@excalidraw/excalidraw/types";
 

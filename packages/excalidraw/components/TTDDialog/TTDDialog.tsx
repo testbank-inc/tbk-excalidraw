@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import { isFiniteNumber } from "@excalidraw/math";
+import { isFiniteNumber } from "@testbank-inc/math";
 
 import type { NonDeletedExcalidrawElement } from "@excalidraw/element/types";
 

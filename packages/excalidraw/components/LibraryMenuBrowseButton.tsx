@@ -1,4 +1,4 @@
-import { VERSIONS } from "@excalidraw/common";
+import { VERSIONS } from "@testbank-inc/common";
 
 import { t } from "../i18n";
 

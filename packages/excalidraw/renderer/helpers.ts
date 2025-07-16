@@ -1,8 +1,8 @@
-import { THEME, THEME_FILTER } from "@excalidraw/common";
+import { THEME, THEME_FILTER } from "@testbank-inc/common";
 
-import { FIXED_BINDING_DISTANCE } from "@excalidraw/element";
-import { getDiamondPoints } from "@excalidraw/element";
-import { elementCenterPoint, getCornerRadius } from "@excalidraw/element";
+import { FIXED_BINDING_DISTANCE } from "@testbank-inc/element";
+import { getDiamondPoints } from "@testbank-inc/element";
+import { elementCenterPoint, getCornerRadius } from "@testbank-inc/element";
 
 import {
   curve,
@@ -13,7 +13,7 @@ import {
   offsetPointsForQuadraticBezier,
   pointFrom,
   pointRotateRads,
-} from "@excalidraw/math";
+} from "@testbank-inc/math";
 
 import type {
   ElementsMap,

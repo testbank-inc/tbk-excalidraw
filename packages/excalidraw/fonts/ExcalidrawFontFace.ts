@@ -1,4 +1,4 @@
-import { promiseTry, LOCAL_FONT_PROTOCOL } from "@excalidraw/common";
+import { promiseTry, LOCAL_FONT_PROTOCOL } from "@testbank-inc/common";
 
 import { subsetWoff2GlyphsByCodepoints } from "../subset/subset-main";
 

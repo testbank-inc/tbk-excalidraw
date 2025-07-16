@@ -6,12 +6,12 @@ import {
   KEYS,
   capitalizeString,
   isTransparent,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import {
   shouldAllowVerticalAlign,
   suppportsHorizontalAlign,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
 import {
   hasBoundTextElement,
@@ -19,9 +19,9 @@ import {
   isImageElement,
   isLinearElement,
   isTextElement,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
-import { hasStrokeColor, toolIsArrow } from "@excalidraw/element";
+import { hasStrokeColor, toolIsArrow } from "@testbank-inc/element";
 
 import type {
   ExcalidrawElement,

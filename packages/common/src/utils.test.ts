@@ -2,7 +2,7 @@ import {
   isTransparent,
   mapFind,
   reduceToCommonValue,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 describe("@excalidraw/common/utils", () => {
   describe("isTransparent()", () => {

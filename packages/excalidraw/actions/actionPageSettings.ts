@@ -1,7 +1,7 @@
 import { register } from "./register";
-import { KEYS } from "@excalidraw/common";
+import { KEYS } from "@testbank-inc/common";
 import { trackEvent } from "../analytics";
-import { CaptureUpdateAction } from "@excalidraw/element";
+import { CaptureUpdateAction } from "@testbank-inc/element";
 import { t } from "../i18n";
 
 export const actionTogglePageSettings = register({

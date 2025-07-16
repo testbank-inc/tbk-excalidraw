@@ -14,7 +14,7 @@ import {
   debounce,
   FONT_FAMILY,
   getFontFamilyString,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import type { ValueOf } from "@excalidraw/common/utility-types";
 

@@ -9,7 +9,7 @@ import {
   capitalizeString,
   getShortcutKey,
   isWritableElement,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import { actionToggleShapeSwitch } from "@excalidraw/excalidraw/actions/actionToggleShapeSwitch";
 

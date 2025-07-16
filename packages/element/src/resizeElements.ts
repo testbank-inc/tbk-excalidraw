@@ -5,16 +5,16 @@ import {
   pointRotateRads,
   type Radians,
   type LocalPoint,
-} from "@excalidraw/math";
+} from "@testbank-inc/math";
 
 import {
   MIN_FONT_SIZE,
   SHIFT_LOCKING_ANGLE,
   rescalePoints,
   getFontString,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
-import type { GlobalPoint } from "@excalidraw/math";
+import type { GlobalPoint } from "@testbank-inc/math";
 
 import type { PointerDownState } from "@excalidraw/excalidraw/types";
 

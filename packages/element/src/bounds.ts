@@ -5,7 +5,7 @@ import {
   invariant,
   rescalePoints,
   sizeOf,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import {
   degreesToRadians,
@@ -14,7 +14,7 @@ import {
   pointFrom,
   pointFromArray,
   pointRotateRads,
-} from "@excalidraw/math";
+} from "@testbank-inc/math";
 
 import { getCurvePathOps } from "@excalidraw/utils/shape";
 
@@ -27,7 +27,7 @@ import type {
   LineSegment,
   LocalPoint,
   Radians,
-} from "@excalidraw/math";
+} from "@testbank-inc/math";
 
 import type { AppState } from "@excalidraw/excalidraw/types";
 

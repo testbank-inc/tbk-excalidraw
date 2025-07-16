@@ -10,7 +10,7 @@ import clsx from "clsx";
 import oc from "open-color";
 import React from "react";
 
-import { THEME } from "@excalidraw/common";
+import { THEME } from "@testbank-inc/common";
 
 import type { Theme } from "@excalidraw/element/types";
 

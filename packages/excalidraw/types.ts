@@ -3,13 +3,13 @@ import type {
   UserIdleState,
   throttleRAF,
   MIME_TYPES,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
-import type { SuggestedBinding } from "@excalidraw/element";
+import type { SuggestedBinding } from "@testbank-inc/element";
 
-import type { LinearElementEditor } from "@excalidraw/element";
+import type { LinearElementEditor } from "@testbank-inc/element";
 
-import type { MaybeTransformHandleType } from "@excalidraw/element";
+import type { MaybeTransformHandleType } from "@testbank-inc/element";
 
 import type {
   PointerType,
@@ -46,7 +46,7 @@ import type {
   CaptureUpdateActionType,
   DurableIncrement,
   EphemeralIncrement,
-} from "@excalidraw/element";
+} from "@testbank-inc/element";
 
 import type { Action } from "./actions/types";
 import type { Spreadsheet } from "./charts";

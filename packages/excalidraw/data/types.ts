@@ -1,4 +1,4 @@
-import type { VERSIONS } from "@excalidraw/common";
+import type { VERSIONS } from "@testbank-inc/common";
 
 import type { ExcalidrawElement } from "@excalidraw/element/types";
 

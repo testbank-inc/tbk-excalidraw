@@ -6,7 +6,7 @@ import {
   invariant,
   isDevEnv,
   isTestEnv,
-} from "@excalidraw/common";
+} from "@testbank-inc/common";
 
 import {
   lineSegment,
@@ -24,9 +24,9 @@ import {
   pointsEqual,
   lineSegmentIntersectionPoints,
   PRECISION,
-} from "@excalidraw/math";
+} from "@testbank-inc/math";
 
-import type { LocalPoint, Radians } from "@excalidraw/math";
+import type { LocalPoint, Radians } from "@testbank-inc/math";
 
 import type { AppState } from "@excalidraw/excalidraw/types";
 

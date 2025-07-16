@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
-import { THEME } from "@excalidraw/common";
+import { THEME } from "@testbank-inc/common";
 
 import type { ValueOf } from "@excalidraw/common/utility-types";
 
