@@ -245,14 +245,23 @@ const _renderStaticScene = ({
 
   // Page background and clipping
   if ((appState as any).canvasPageSettings?.enabled) {
-    const pageWidth = 1000; // 캔버스 크기는 항상 1000x1000 고정
-    const pageHeight = 1000;
+    const pageWidth = (appState as any).canvasPageSettings.width;
+    const pageHeight = (appState as any).canvasPageSettings.height;
 
     // Save context before applying changes
     context.save();
 
+    // Fill entire viewport with gray background first
+    context.fillStyle = "#cccccc"; // 회색 배경
+    context.fillRect(
+      -normalizedWidth / appState.zoom.value,
+      -normalizedHeight / appState.zoom.value,
+      (normalizedWidth * 2) / appState.zoom.value,
+      (normalizedHeight * 2) / appState.zoom.value,
+    );
+
     // Fill page background (only page area, not entire viewport)
-    context.fillStyle = "#FFFDF0"; // 백그라운드 색상 고정
+    context.fillStyle = (appState as any).canvasPageSettings.backgroundColor || "#FFFDF0";
     context.fillRect(0, 0, pageWidth, pageHeight);
 
     // Apply clipping to constrain drawing to page area

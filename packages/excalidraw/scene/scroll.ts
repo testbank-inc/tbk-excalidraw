@@ -102,8 +102,8 @@ export const constrainScrollToPageBounds = (
     return { scrollX, scrollY };
   }
 
-  const pageWidth = 1000; //canvasPageSettings.width;
-  const pageHeight = 1000; //canvasPageSettings.height;
+  const pageWidth = canvasPageSettings.width;
+  const pageHeight = canvasPageSettings.height;
   const viewportWidth = width / zoom.value;
   const viewportHeight = height / zoom.value;
 
@@ -129,13 +129,13 @@ export const constrainZoomForPageBounds = (
     return zoom;
   }
 
-  const pageWidth = 1000; // 캔버스 크기는 항상 1000x1000 고정
-  const pageHeight = 1000;
+  const pageWidth = canvasPageSettings.width;
+  const pageHeight = canvasPageSettings.height;
 
-  // 컨테이너 크기와 페이지 크기에 따른 적절한 줌 계산
+  // 화면 비율에 따라 가로 또는 세로 중 하나만 화면에 꽉 차도록 제한
   const scaleX = width / pageWidth;
   const scaleY = height / pageHeight;
-  const minZoom = Math.min(scaleX, scaleY);
+  const minZoom = Math.max(scaleX, scaleY); // Math.max로 변경 - 더 큰 값 사용
   const maxZoom = 5;
 
   return Math.max(minZoom, Math.min(maxZoom, zoom));

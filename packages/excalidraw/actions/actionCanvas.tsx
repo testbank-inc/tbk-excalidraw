@@ -44,6 +44,7 @@ import { setCursor } from "../cursor";
 
 import { t } from "../i18n";
 import { getNormalizedZoom } from "../scene";
+import { constrainZoomForPageBounds } from "../scene/scroll";
 import { centerScrollOn } from "../scene/scroll";
 import { getStateForZoom } from "../scene/zoom";
 
@@ -136,6 +137,11 @@ export const actionZoomIn = register({
   icon: ZoomInIcon,
   trackEvent: { category: "canvas" },
   perform: (_elements, appState, _, app) => {
+    // 페이지 제약을 먼저 적용한 다음 일반 제약 적용
+    const targetZoom = appState.zoom.value + ZOOM_STEP;
+    const pageConstrainedZoom = constrainZoomForPageBounds(targetZoom, appState);
+    const finalZoom = getNormalizedZoom(pageConstrainedZoom);
+
     return {
       appState: {
         ...appState,
@@ -143,7 +149,7 @@ export const actionZoomIn = register({
           {
             viewportX: appState.width / 2 + appState.offsetLeft,
             viewportY: appState.height / 2 + appState.offsetTop,
-            nextZoom: getNormalizedZoom(appState.zoom.value + ZOOM_STEP),
+            nextZoom: finalZoom,
           },
           appState,
         ),
@@ -177,6 +183,11 @@ export const actionZoomOut = register({
   viewMode: true,
   trackEvent: { category: "canvas" },
   perform: (_elements, appState, _, app) => {
+    // 페이지 제약을 먼저 적용한 다음 일반 제약 적용
+    const targetZoom = appState.zoom.value - ZOOM_STEP;
+    const pageConstrainedZoom = constrainZoomForPageBounds(targetZoom, appState);
+    const finalZoom = getNormalizedZoom(pageConstrainedZoom);
+
     return {
       appState: {
         ...appState,
@@ -184,7 +195,7 @@ export const actionZoomOut = register({
           {
             viewportX: appState.width / 2 + appState.offsetLeft,
             viewportY: appState.height / 2 + appState.offsetTop,
-            nextZoom: getNormalizedZoom(appState.zoom.value - ZOOM_STEP),
+            nextZoom: finalZoom,
           },
           appState,
         ),

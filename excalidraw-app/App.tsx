@@ -342,12 +342,6 @@ const ExcalidrawWrapper = () => {
 
   const [langCode, setLangCode] = useAppLangCode();
 
-  // 컨테이너 크기 상태 추가
-  const [containerSize, setContainerSize] = useState({
-    width: 1000,
-    height: 1000,
-  });
-
   // initial state
   // ---------------------------------------------------------------------------
 
@@ -803,59 +797,14 @@ const ExcalidrawWrapper = () => {
     },
   };
 
-  // 컨테이너 크기 계산 함수
-  const calculateContainerSize = useCallback(() => {
-    const maxSize = 1000;
-    // 디바이스 크기에 따른 패딩 조정
-    const isMobile = window.innerWidth < 768;
-    const sidePadding = isMobile ? 16 : 32; // 양쪽 패딩
-    const topPadding = isMobile ? 12 : 20; // 상단 패딩
-    const bottomPadding = isMobile ? 8 : 16; // 하단 패딩
-
-    const availableWidth = window.innerWidth - sidePadding;
-    const availableHeight = window.innerHeight - topPadding - bottomPadding;
-
-    // 사용 가능한 공간 중 작은 값을 선택하되, 최대 1000px로 제한
-    const size = Math.min(maxSize, Math.min(availableWidth, availableHeight));
-
-    return {
-      width: size,
-      height: size,
-    };
-  }, []);
-
-  // 윈도우 리사이즈 이벤트 처리
-  useEffect(() => {
-    const handleResize = () => {
-      setContainerSize(calculateContainerSize());
-    };
-
-    // 초기 크기 설정
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [calculateContainerSize]);
-
-  // 동적 패딩 계산
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-  const dynamicPadding = isMobile ? "8px" : "16px";
-
   return (
     <div
       style={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "flex-start",
-        alignItems: "center",
-        backgroundColor: "#f5f5f5",
-        paddingLeft: `max(${dynamicPadding}, env(safe-area-inset-left))`,
-        paddingRight: `max(${dynamicPadding}, env(safe-area-inset-right))`,
-        paddingTop: isMobile ? "max(12px, env(safe-area-inset-top))" : "20px",
-        paddingBottom: isMobile
-          ? "max(8px, env(safe-area-inset-bottom))"
-          : "16px",
+        width: "100vw",
+        height: "100vh",
+        margin: 0,
+        padding: 0,
+        overflow: "hidden",
       }}
       className={clsx("excalidraw-app", {
         "is-collaborating": isCollaborating,
@@ -863,12 +812,9 @@ const ExcalidrawWrapper = () => {
     >
       <div
         style={{
-          width: `${containerSize.width}px`,
-          height: `${containerSize.height}px`,
-          border: "2px solid #ccc",
-          borderRadius: "8px",
+          width: "100%",
+          height: "100%",
           overflow: "hidden",
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
         }}
       >
         <Excalidraw
@@ -878,9 +824,10 @@ const ExcalidrawWrapper = () => {
           isCollaborating={isCollaborating}
           canvasPageSettings={{
             enabled: true,
-            width: 1000,
-            height: 1000,
-            backgroundColor: "#FFFDF0",
+            width: 3000,
+            height: 3000,
+            backgroundColor: "#d7dfe9",
+            showBorder: false,
           }}
           gridModeEnabled={false}
           onPointerUpdate={collabAPI?.onPointerUpdate}

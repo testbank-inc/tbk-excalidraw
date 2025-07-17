@@ -41,6 +41,7 @@ export const dragSelectedElements = (
     y: number;
   },
   gridSize: NullableGridSize,
+  appState: AppState,
 ) => {
   if (
     _selectedElements.length === 1 &&
@@ -103,25 +104,27 @@ export const dragSelectedElements = (
   );
 
   // 페이지 경계 제한을 위한 오프셋 조정
-  const PAGE_WIDTH = 1000;
-  const PAGE_HEIGHT = 1000;
-  
-  // 모든 원본 요소들이 페이지 경계를 벗어나지 않도록 오프셋 조정
   let constrainedOffsetX = adjustedOffset.x;
   let constrainedOffsetY = adjustedOffset.y;
   
-  for (const element of origElements) {
-    const newX = element.x + adjustedOffset.x;
-    const newY = element.y + adjustedOffset.y;
+  if (appState.canvasPageSettings?.enabled) {
+    const PAGE_WIDTH = appState.canvasPageSettings.width;
+    const PAGE_HEIGHT = appState.canvasPageSettings.height;
     
-    // 각 요소가 페이지 경계를 벗어나지 않도록 오프셋 제한
-    const maxOffsetX = PAGE_WIDTH - element.width - element.x;
-    const minOffsetX = -element.x;
-    const maxOffsetY = PAGE_HEIGHT - element.height - element.y;
-    const minOffsetY = -element.y;
-    
-    constrainedOffsetX = Math.max(minOffsetX, Math.min(maxOffsetX, constrainedOffsetX));
-    constrainedOffsetY = Math.max(minOffsetY, Math.min(maxOffsetY, constrainedOffsetY));
+    // 모든 원본 요소들이 페이지 경계를 벗어나지 않도록 오프셋 조정
+    for (const element of origElements) {
+      const newX = element.x + adjustedOffset.x;
+      const newY = element.y + adjustedOffset.y;
+      
+      // 각 요소가 페이지 경계를 벗어나지 않도록 오프셋 제한
+      const maxOffsetX = PAGE_WIDTH - element.width - element.x;
+      const minOffsetX = -element.x;
+      const maxOffsetY = PAGE_HEIGHT - element.height - element.y;
+      const minOffsetY = -element.y;
+      
+      constrainedOffsetX = Math.max(minOffsetX, Math.min(maxOffsetX, constrainedOffsetX));
+      constrainedOffsetY = Math.max(minOffsetY, Math.min(maxOffsetY, constrainedOffsetY));
+    }
   }
   
   const finalOffset = {
@@ -223,6 +226,7 @@ export const dragNewElement = ({
   shouldResizeFromCenter,
   zoom,
   scene,
+  appState,
   widthAspectRatio = null,
   originOffset = null,
   informMutation = true,
@@ -239,6 +243,7 @@ export const dragNewElement = ({
   shouldResizeFromCenter: boolean;
   zoom: NormalizedZoomValue;
   scene: Scene;
+  appState: AppState;
   /** whether to keep given aspect ratio when `isResizeWithSidesSameLength` is
       true */
   widthAspectRatio?: number | null;
@@ -319,16 +324,18 @@ export const dragNewElement = ({
       };
     }
 
-    // 페이지 경계 내에서만 요소를 생성하도록 제한
-    const PAGE_WIDTH = 1000;
-    const PAGE_HEIGHT = 1000;
-    
     let finalX = newX + (originOffset?.x ?? 0);
     let finalY = newY + (originOffset?.y ?? 0);
     
-    // 요소가 페이지 경계를 벗어나지 않도록 제한
-    finalX = Math.max(0, Math.min(PAGE_WIDTH - width, finalX));
-    finalY = Math.max(0, Math.min(PAGE_HEIGHT - height, finalY));
+    // 페이지 경계 내에서만 요소를 생성하도록 제한
+    if (appState.canvasPageSettings?.enabled) {
+      const PAGE_WIDTH = appState.canvasPageSettings.width;
+      const PAGE_HEIGHT = appState.canvasPageSettings.height;
+      
+      // 요소가 페이지 경계를 벗어나지 않도록 제한
+      finalX = Math.max(0, Math.min(PAGE_WIDTH - width, finalX));
+      finalY = Math.max(0, Math.min(PAGE_HEIGHT - height, finalY));
+    }
 
     scene.mutateElement(
       newElement,

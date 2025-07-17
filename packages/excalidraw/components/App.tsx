@@ -664,6 +664,7 @@ class App extends React.Component<AppProps, AppState> {
       name = `${t("labels.untitled")}-${getDateTime()}`,
       canvasPageSettings,
     } = props;
+    
     this.state = {
       ...defaultAppState,
       theme,
@@ -2349,6 +2350,43 @@ class App extends React.Component<AppProps, AppState> {
       };
     }
     const scene = restore(initialData, null, null, { repairBindings: true });
+    
+    // Calculate initial zoom to fit canvas width to screen
+    let initialZoom = scene.appState.zoom?.value || 1;
+    if (this.state.canvasPageSettings?.enabled) {
+      const pageWidth = this.state.canvasPageSettings.width;
+      const screenWidth = this.state.width;
+      // Calculate zoom to fit page width to screen width (100%)
+      const calculatedZoom = screenWidth / pageWidth;
+      
+      // Apply page constraints
+      const tempAppState = {
+        ...scene.appState,
+        canvasPageSettings: this.state.canvasPageSettings,
+        width: this.state.width,
+        height: this.state.height,
+      };
+      initialZoom = constrainZoomForPageBounds(calculatedZoom, tempAppState);
+    }
+    
+    // Calculate initial scroll position to center the page
+    let initialScrollX = 0;
+    let initialScrollY = 0;
+    if (this.state.canvasPageSettings?.enabled) {
+      const pageWidth = this.state.canvasPageSettings.width;
+      const pageHeight = this.state.canvasPageSettings.height;
+      const screenWidth = this.state.width;
+      const screenHeight = this.state.height;
+      
+      // Center the page horizontally
+      const viewportWidth = screenWidth / initialZoom;
+      initialScrollX = -(viewportWidth - pageWidth) / 2;
+      
+      // Center the page vertically  
+      const viewportHeight = screenHeight / initialZoom;
+      initialScrollY = -(viewportHeight - pageHeight) / 2;
+    }
+    
     scene.appState = {
       ...scene.appState,
       theme: this.props.theme || scene.appState.theme,
@@ -2363,6 +2401,13 @@ class App extends React.Component<AppProps, AppState> {
           : scene.appState.activeTool,
       isLoading: false,
       toast: this.state.toast,
+      // Preserve canvasPageSettings from constructor state
+      canvasPageSettings: this.state.canvasPageSettings,
+      // Set initial zoom to fit width
+      zoom: { value: initialZoom },
+      // Set initial scroll to center the page
+      scrollX: initialScrollX,
+      scrollY: initialScrollY,
     };
     if (initialData?.scrollToContent) {
       scene.appState = {
@@ -3637,12 +3682,16 @@ class App extends React.Component<AppProps, AppState> {
      */
     value: number,
   ) => {
+    // 페이지 제약을 먼저 적용한 다음 일반 제약 적용
+    const pageConstrainedZoom = constrainZoomForPageBounds(value, this.state);
+    const finalZoom = getNormalizedZoom(pageConstrainedZoom);
+
     this.setState({
       ...getStateForZoom(
         {
           viewportX: this.state.width / 2 + this.state.offsetLeft,
           viewportY: this.state.height / 2 + this.state.offsetTop,
-          nextZoom: getNormalizedZoom(value),
+          nextZoom: finalZoom,
         },
         this.state,
       ),
@@ -4884,16 +4933,23 @@ class App extends React.Component<AppProps, AppState> {
 
     const initialScale = gesture.initialScale;
     if (initialScale) {
-      this.setState((state) => ({
-        ...getStateForZoom(
-          {
-            viewportX: this.lastViewportPosition.x,
-            viewportY: this.lastViewportPosition.y,
-            nextZoom: getNormalizedZoom(initialScale * event.scale),
-          },
-          state,
-        ),
-      }));
+      this.setState((state) => {
+        // 페이지 제약을 먼저 적용한 다음 일반 제약 적용
+        const targetZoom = initialScale * event.scale;
+        const pageConstrainedZoom = constrainZoomForPageBounds(targetZoom, state);
+        const finalZoom = getNormalizedZoom(pageConstrainedZoom);
+
+        return {
+          ...getStateForZoom(
+            {
+              viewportX: this.lastViewportPosition.x,
+              viewportY: this.lastViewportPosition.y,
+              nextZoom: finalZoom,
+            },
+            state,
+          ),
+        };
+      });
     }
   });
 
@@ -5798,9 +5854,10 @@ class App extends React.Component<AppProps, AppState> {
       const distance = getDistance(Array.from(gesture.pointers.values()));
       const scaleFactor = distance / gesture.initialDistance;
 
-      const nextZoom = scaleFactor
-        ? getNormalizedZoom(initialScale * scaleFactor)
-        : this.state.zoom.value;
+      const targetZoom = scaleFactor ? initialScale * scaleFactor : this.state.zoom.value;
+      // 페이지 제약을 먼저 적용한 다음 일반 제약 적용
+      const pageConstrainedZoom = constrainZoomForPageBounds(targetZoom, this.state);
+      const nextZoom = getNormalizedZoom(pageConstrainedZoom);
 
       // Debug log for pinch zoom
       console.log("Pinch zoom processing:", {
@@ -11324,17 +11381,23 @@ class App extends React.Component<AppProps, AppState> {
           // reduced amplification for small deltas (small movements on a trackpad)
           Math.min(1, absDelta / 20);
 
-        this.translateCanvas((state) => ({
-          ...getStateForZoom(
-            {
-              viewportX: this.lastViewportPosition.x,
-              viewportY: this.lastViewportPosition.y,
-              nextZoom: getNormalizedZoom(newZoom),
-            },
-            state,
-          ),
-          shouldCacheIgnoreZoom: true,
-        }));
+        this.translateCanvas((state) => {
+          // 페이지 제약을 먼저 적용한 다음 일반 제약 적용
+          const pageConstrainedZoom = constrainZoomForPageBounds(newZoom, state);
+          const finalZoom = getNormalizedZoom(pageConstrainedZoom);
+
+          return {
+            ...getStateForZoom(
+              {
+                viewportX: this.lastViewportPosition.x,
+                viewportY: this.lastViewportPosition.y,
+                nextZoom: finalZoom,
+              },
+              state,
+            ),
+            shouldCacheIgnoreZoom: true,
+          };
+        });
         this.resetShouldCacheIgnoreZoomDebounced();
         return;
       }
