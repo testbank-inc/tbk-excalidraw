@@ -2380,11 +2380,29 @@ class App extends React.Component<AppProps, AppState> {
       
       // Center the page horizontally
       const viewportWidth = screenWidth / initialZoom;
-      initialScrollX = -(viewportWidth - pageWidth) / 2;
+      const centeredScrollX = -(viewportWidth - pageWidth) / 2;
       
       // Center the page vertically  
       const viewportHeight = screenHeight / initialZoom;
-      initialScrollY = -(viewportHeight - pageHeight) / 2;
+      const centeredScrollY = -(viewportHeight - pageHeight) / 2;
+      
+      // Apply scroll constraints to prevent sudden jumps
+      const tempAppState = {
+        ...scene.appState,
+        canvasPageSettings: this.state.canvasPageSettings,
+        width: this.state.width,
+        height: this.state.height,
+        zoom: { value: initialZoom },
+      };
+      
+      const constrainedScroll = constrainScrollToPageBounds(
+        centeredScrollX,
+        centeredScrollY,
+        tempAppState
+      );
+      
+      initialScrollX = constrainedScroll.scrollX;
+      initialScrollY = constrainedScroll.scrollY;
     }
     
     scene.appState = {

@@ -2504,7 +2504,7 @@
     "@testbank-inc/math" "0.18.0"
 
 "@testbank-inc/excalidraw@file:/Users/kimjihun/apps/testbank/tbk-excalidraw/packages/excalidraw":
-  version "0.19.2"
+  version "0.19.3"
   resolved "file:packages/excalidraw"
   dependencies:
     "@braintree/sanitize-url" "6.0.2"
