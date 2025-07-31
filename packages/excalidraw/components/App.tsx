@@ -6662,20 +6662,29 @@ class App extends React.Component<AppProps, AppState> {
         (event.pointerType as string) === "pen" ||
         (event.pointerType === "touch" && (event as any).pressure > 0);
 
+      // Check if finger is touching an element (for tool switching)
+      const hitElement = this.getElementAtPosition(
+        pointerDownState.origin.x,
+        pointerDownState.origin.y,
+      );
+
       console.log("Drawing restriction check:", {
         isPen,
         gesturePointersSize: gesture.pointers.size,
         activeTool: this.state.activeTool.type,
+        hitElement: hitElement?.type,
       });
 
       if (
         !isPen &&
         gesture.pointers.size === 1 &&
-        !isHandToolActive(this.state)
+        !isHandToolActive(this.state) &&
+        !hitElement // Allow finger touch on elements for tool switching
       ) {
         console.log("Preventing drawing with finger touches - RETURNING EARLY");
         // Prevent drawing with finger touches - only allow stylus/pen
         // But allow multi-touch for pinch zoom and hand tool
+        // Exception: allow finger touch on elements for tool switching
         event.preventDefault();
         return;
       }
@@ -6953,7 +6962,21 @@ class App extends React.Component<AppProps, AppState> {
     // Auto-switch to selection when finger touches element during freedraw
     const isFinger = !isPen; // Not pen = finger touch or mouse
 
+    console.log("🔍 Touch analysis:", {
+      isFinger,
+      isPen,
+      pointerType: event.pointerType,
+      pressure: (event as any).pressure,
+      hitElement: hitElement?.type,
+      activeTool: this.state.activeTool.type,
+    });
+
     if (isFinger && hitElement && this.state.activeTool.type === "freedraw") {
+      console.log("✅ Auto-switching to selection mode!", {
+        elementType: hitElement.type,
+        elementId: hitElement.id,
+      });
+
       // Switch to selection tool and select the touched element
       this.setState({
         activeTool: { type: "selection", customType: null, locked: false },
