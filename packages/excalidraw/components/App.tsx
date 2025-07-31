@@ -385,7 +385,10 @@ import { LaserTrails } from "../laser-trails";
 import { withBatchedUpdates, withBatchedUpdatesThrottled } from "../reactUtils";
 import { textWysiwyg } from "../wysiwyg/textWysiwyg";
 import { isOverScrollBars } from "../scene/scrollbars";
-import { constrainScrollToPageBounds, constrainZoomForPageBounds } from "../scene/scroll";
+import {
+  constrainScrollToPageBounds,
+  constrainZoomForPageBounds,
+} from "../scene/scroll";
 
 import { isMaybeMermaidDefinition } from "../mermaid";
 
@@ -664,7 +667,7 @@ class App extends React.Component<AppProps, AppState> {
       name = `${t("labels.untitled")}-${getDateTime()}`,
       canvasPageSettings,
     } = props;
-    
+
     this.state = {
       ...defaultAppState,
       theme,
@@ -2350,7 +2353,7 @@ class App extends React.Component<AppProps, AppState> {
       };
     }
     const scene = restore(initialData, null, null, { repairBindings: true });
-    
+
     // Calculate initial zoom to fit canvas width to screen
     let initialZoom = scene.appState.zoom?.value || 1;
     if (this.state.canvasPageSettings?.enabled) {
@@ -2358,7 +2361,7 @@ class App extends React.Component<AppProps, AppState> {
       const screenWidth = this.state.width;
       // Calculate zoom to fit page width to screen width (100%)
       const calculatedZoom = screenWidth / pageWidth;
-      
+
       // Apply page constraints
       const tempAppState = {
         ...scene.appState,
@@ -2368,7 +2371,7 @@ class App extends React.Component<AppProps, AppState> {
       };
       initialZoom = constrainZoomForPageBounds(calculatedZoom, tempAppState);
     }
-    
+
     // Calculate initial scroll position to center the page
     let initialScrollX = 0;
     let initialScrollY = 0;
@@ -2377,15 +2380,15 @@ class App extends React.Component<AppProps, AppState> {
       const pageHeight = this.state.canvasPageSettings.height;
       const screenWidth = this.state.width;
       const screenHeight = this.state.height;
-      
+
       // Center the page horizontally
       const viewportWidth = screenWidth / initialZoom;
       const centeredScrollX = -(viewportWidth - pageWidth) / 2;
-      
-      // Center the page vertically  
+
+      // Center the page vertically
       const viewportHeight = screenHeight / initialZoom;
       const centeredScrollY = -(viewportHeight - pageHeight) / 2;
-      
+
       // Apply scroll constraints to prevent sudden jumps
       const tempAppState = {
         ...scene.appState,
@@ -2394,17 +2397,17 @@ class App extends React.Component<AppProps, AppState> {
         height: this.state.height,
         zoom: { value: initialZoom },
       };
-      
+
       const constrainedScroll = constrainScrollToPageBounds(
         centeredScrollX,
         centeredScrollY,
-        tempAppState
+        tempAppState,
       );
-      
+
       initialScrollX = constrainedScroll.scrollX;
       initialScrollY = constrainedScroll.scrollY;
     }
-    
+
     scene.appState = {
       ...scene.appState,
       theme: this.props.theme || scene.appState.theme,
@@ -3372,6 +3375,7 @@ class App extends React.Component<AppProps, AppState> {
         // Note, we should close the sidebar only if we're dropping items
         // from library, not when pasting from clipboard. Alas.
         openSidebar:
+          this.state.openSidebar &&
           this.state.openSidebar &&
           this.device.editor.canFitSidebar &&
           editorJotaiStore.get(isSidebarDockedAtom)
@@ -4954,7 +4958,10 @@ class App extends React.Component<AppProps, AppState> {
       this.setState((state) => {
         // 페이지 제약을 먼저 적용한 다음 일반 제약 적용
         const targetZoom = initialScale * event.scale;
-        const pageConstrainedZoom = constrainZoomForPageBounds(targetZoom, state);
+        const pageConstrainedZoom = constrainZoomForPageBounds(
+          targetZoom,
+          state,
+        );
         const finalZoom = getNormalizedZoom(pageConstrainedZoom);
 
         return {
@@ -5872,9 +5879,14 @@ class App extends React.Component<AppProps, AppState> {
       const distance = getDistance(Array.from(gesture.pointers.values()));
       const scaleFactor = distance / gesture.initialDistance;
 
-      const targetZoom = scaleFactor ? initialScale * scaleFactor : this.state.zoom.value;
+      const targetZoom = scaleFactor
+        ? initialScale * scaleFactor
+        : this.state.zoom.value;
       // 페이지 제약을 먼저 적용한 다음 일반 제약 적용
-      const pageConstrainedZoom = constrainZoomForPageBounds(targetZoom, this.state);
+      const pageConstrainedZoom = constrainZoomForPageBounds(
+        targetZoom,
+        this.state,
+      );
       const nextZoom = getNormalizedZoom(pageConstrainedZoom);
 
       // Debug log for pinch zoom
@@ -7485,7 +7497,12 @@ class App extends React.Component<AppProps, AppState> {
             this.device,
           );
         if (elementWithTransformHandleType != null) {
-          if (
+          // Handle delete button on nw (northwest/top-left) handle
+          if (elementWithTransformHandleType.transformHandleType === "nw") {
+            // Execute delete action via actionManager
+            this.actionManager.executeAction(actionDeleteSelected, "api");
+            return true; // Prevent further processing
+          } else if (
             elementWithTransformHandleType.transformHandleType === "rotation"
           ) {
             this.setState({
@@ -10084,7 +10101,7 @@ class App extends React.Component<AppProps, AppState> {
         !(hitElement && isElbowArrow(hitElement)) &&
         // not dragged
         !pointerDownState.drag.hasOccurred &&
-        // not resized
+        // not resizing
         !this.state.isResizing &&
         // only hitting the bounding box of the previous hit element
         ((hitElement &&
@@ -11401,7 +11418,10 @@ class App extends React.Component<AppProps, AppState> {
 
         this.translateCanvas((state) => {
           // 페이지 제약을 먼저 적용한 다음 일반 제약 적용
-          const pageConstrainedZoom = constrainZoomForPageBounds(newZoom, state);
+          const pageConstrainedZoom = constrainZoomForPageBounds(
+            newZoom,
+            state,
+          );
           const finalZoom = getNormalizedZoom(pageConstrainedZoom);
 
           return {
@@ -11562,14 +11582,14 @@ class App extends React.Component<AppProps, AppState> {
             offsetLeft,
             offsetTop,
           };
-          
+
           // Apply zoom constraint when page settings are enabled
           if (prevState.canvasPageSettings?.enabled) {
             const constrainedZoom = constrainZoomForPageBounds(
               prevState.zoom.value,
-              { ...prevState, ...newState }
+              { ...prevState, ...newState },
             );
-            
+
             if (constrainedZoom !== prevState.zoom.value) {
               return {
                 ...newState,
@@ -11577,7 +11597,7 @@ class App extends React.Component<AppProps, AppState> {
               };
             }
           }
-          
+
           return newState;
         },
         () => {

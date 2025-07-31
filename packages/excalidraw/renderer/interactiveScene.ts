@@ -42,7 +42,10 @@ import {
   selectGroupsFromGivenElements,
 } from "@testbank-inc/element";
 
-import { getCommonBounds, getElementAbsoluteCoords } from "@testbank-inc/element";
+import {
+  getCommonBounds,
+  getElementAbsoluteCoords,
+} from "@testbank-inc/element";
 
 import type {
   SuggestedBinding,
@@ -92,6 +95,7 @@ import type {
   InteractiveSceneRenderConfig,
   RenderableElementsMap,
 } from "../scene/types";
+import { COLOR } from "../components/ColorPicker/tbkDesignSystemColors";
 
 const renderElbowArrowMidPointHighlight = (
   context: CanvasRenderingContext2D,
@@ -309,7 +313,7 @@ const renderSelectionBorder = (
 
   context.save();
   context.translate(appState.scrollX, appState.scrollY);
-  context.lineWidth = (activeEmbeddable ? 4 : 1) / appState.zoom.value;
+  context.lineWidth = (activeEmbeddable ? 4 : 2) / appState.zoom.value;
 
   const count = selectionColors.length;
   for (let index = 0; index < count; ++index) {
@@ -559,37 +563,182 @@ const renderTransformHandles = (
   transformHandles: TransformHandles,
   angle: number,
 ): void => {
+  const handleSize = 20; // Increased base size
+  const scaledSize = handleSize / appState.zoom.value;
+
   Object.keys(transformHandles).forEach((key) => {
     const transformHandle = transformHandles[key as TransformHandleType];
     if (transformHandle !== undefined) {
       const [x, y, width, height] = transformHandle;
+      const centerX = x + width / 2;
+      const centerY = y + height / 2;
+      const radius = scaledSize / 2;
 
       context.save();
-      context.lineWidth = 1 / appState.zoom.value;
-      if (renderConfig.selectionColor) {
-        context.strokeStyle = renderConfig.selectionColor;
-      }
+
+      // Draw blue circular background
+      context.beginPath();
+      context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+      context.fillStyle = "#4285f4"; // Google blue color
+      context.fill();
+
+      // Add white border
+      context.strokeStyle = "#ffffff";
+      context.lineWidth = 2 / appState.zoom.value;
+      context.stroke();
+
+      // Draw icon based on handle type
+      context.fillStyle = "#ffffff";
+      context.strokeStyle = "#ffffff";
+      context.lineWidth = 1.5 / appState.zoom.value;
+
+      const iconSize = radius * 0.6;
+
       if (key === "rotation") {
-        fillCircle(context, x + width / 2, y + height / 2, width / 2, true);
-        // prefer round corners if roundRect API is available
-      } else if (context.roundRect) {
+        // Draw rotation icon (circular arrow)
         context.beginPath();
-        context.roundRect(x, y, width, height, 2 / appState.zoom.value);
-        context.fill();
+        context.arc(
+          centerX,
+          centerY,
+          iconSize * 0.6,
+          -Math.PI / 2,
+          Math.PI,
+          false,
+        );
+        context.stroke();
+
+        // Add arrowhead
+        const arrowX = centerX - iconSize * 0.6;
+        const arrowY = centerY;
+        context.beginPath();
+        context.moveTo(arrowX - iconSize * 0.2, arrowY - iconSize * 0.2);
+        context.lineTo(arrowX, arrowY);
+        context.lineTo(arrowX - iconSize * 0.2, arrowY + iconSize * 0.2);
         context.stroke();
       } else {
-        strokeRectWithRotation(
-          context,
-          x,
-          y,
-          width,
-          height,
-          x + width / 2,
-          y + height / 2,
-          angle,
-          true, // fill before stroke
-        );
+        // Draw resize arrows based on handle direction
+        const drawArrow = (
+          fromX: number,
+          fromY: number,
+          toX: number,
+          toY: number,
+        ) => {
+          // Draw line
+          context.beginPath();
+          context.moveTo(fromX, fromY);
+          context.lineTo(toX, toY);
+          context.stroke();
+
+          // Draw arrowhead
+          const headlen = iconSize * 0.3;
+          const angle = Math.atan2(toY - fromY, toX - fromX);
+          context.beginPath();
+          context.moveTo(toX, toY);
+          context.lineTo(
+            toX - headlen * Math.cos(angle - Math.PI / 6),
+            toY - headlen * Math.sin(angle - Math.PI / 6),
+          );
+          context.moveTo(toX, toY);
+          context.lineTo(
+            toX - headlen * Math.cos(angle + Math.PI / 6),
+            toY - headlen * Math.sin(angle + Math.PI / 6),
+          );
+          context.stroke();
+        };
+
+        switch (key) {
+          case "nw":
+            // Special delete button for top-left handle
+            // Change background to red for delete button
+            context.beginPath();
+            context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            context.fillStyle = "#dc3545"; // Red color for delete
+            context.fill();
+
+            // Add white border
+            context.strokeStyle = "#ffffff";
+            context.lineWidth = 2 / appState.zoom.value;
+            context.stroke();
+
+            // Draw X icon for delete
+            context.strokeStyle = "#ffffff";
+            context.lineWidth = 2 / appState.zoom.value;
+            const crossSize = iconSize * 0.5;
+
+            // Draw X
+            context.beginPath();
+            context.moveTo(centerX - crossSize, centerY - crossSize);
+            context.lineTo(centerX + crossSize, centerY + crossSize);
+            context.moveTo(centerX + crossSize, centerY - crossSize);
+            context.lineTo(centerX - crossSize, centerY + crossSize);
+            context.stroke();
+            break;
+          case "se":
+            // Diagonal arrows (SE only now)
+            drawArrow(
+              centerX - iconSize * 0.4,
+              centerY - iconSize * 0.4,
+              centerX + iconSize * 0.4,
+              centerY + iconSize * 0.4,
+            );
+            drawArrow(
+              centerX + iconSize * 0.4,
+              centerY + iconSize * 0.4,
+              centerX - iconSize * 0.4,
+              centerY - iconSize * 0.4,
+            );
+            break;
+          case "ne":
+          case "sw":
+            // Diagonal arrows (NE-SW)
+            drawArrow(
+              centerX + iconSize * 0.4,
+              centerY - iconSize * 0.4,
+              centerX - iconSize * 0.4,
+              centerY + iconSize * 0.4,
+            );
+            drawArrow(
+              centerX - iconSize * 0.4,
+              centerY + iconSize * 0.4,
+              centerX + iconSize * 0.4,
+              centerY - iconSize * 0.4,
+            );
+            break;
+          case "n":
+          case "s":
+            // Vertical arrows
+            drawArrow(
+              centerX,
+              centerY - iconSize * 0.4,
+              centerX,
+              centerY + iconSize * 0.4,
+            );
+            drawArrow(
+              centerX,
+              centerY + iconSize * 0.4,
+              centerX,
+              centerY - iconSize * 0.4,
+            );
+            break;
+          case "e":
+          case "w":
+            // Horizontal arrows
+            drawArrow(
+              centerX - iconSize * 0.4,
+              centerY,
+              centerX + iconSize * 0.4,
+              centerY,
+            );
+            drawArrow(
+              centerX + iconSize * 0.4,
+              centerY,
+              centerX - iconSize * 0.4,
+              centerY,
+            );
+            break;
+        }
       }
+
       context.restore();
     }
   });
@@ -902,7 +1051,7 @@ const _renderInteractiveScene = ({
         elementsMap,
       );
     }
-    const selectionColor = renderConfig.selectionColor || oc.black;
+    const selectionColor = COLOR.informative600; // tbk design system color
 
     if (showBoundingBox) {
       // Optimisation for finding quickly relevant element ids
@@ -959,7 +1108,7 @@ const _renderInteractiveScene = ({
             x2,
             y2,
             selectionColors: element.locked ? ["#ced4da"] : selectionColors,
-            dashed: !!remoteClients || element.locked,
+            dashed: true, // Always use dashed lines for selection
             cx,
             cy,
             activeEmbeddable:
@@ -985,7 +1134,7 @@ const _renderInteractiveScene = ({
           y2,
           selectionColors: groupElements.some((el) => el.locked)
             ? ["#ced4da"]
-            : [oc.black],
+            : [COLOR.informative600], // ALERT_COLOR.informative for group selection
           dashed: true,
           cx: x1 + (x2 - x1) / 2,
           cy: y1 + (y2 - y1) / 2,
