@@ -6913,6 +6913,61 @@ class App extends React.Component<AppProps, AppState> {
       return;
     }
 
+    // Auto-switch to freedraw when pen clicks outside selected elements
+    const isPen =
+      (event.pointerType as string) === "pen" ||
+      (event.pointerType === "touch" && (event as any).pressure > 0);
+
+    const hasSelectedElements =
+      Object.keys(this.state.selectedElementIds).length > 0;
+
+    const hitElement = this.getElementAtPosition(
+      pointerDownState.origin.x,
+      pointerDownState.origin.y,
+    );
+
+    if (
+      isPen &&
+      hasSelectedElements &&
+      !hitElement &&
+      this.state.activeTool.type === "selection"
+    ) {
+      // Switch to freedraw tool and start drawing immediately
+      this.setState({
+        activeTool: { type: "freedraw", customType: null, locked: false },
+        selectedElementIds: makeNextSelectedElementIds({}, this.state),
+        selectedGroupIds: {},
+        editingGroupId: null,
+        activeEmbeddable: null,
+      });
+
+      // Start freedraw immediately
+      this.handleFreeDrawElementOnPointerDown(
+        event,
+        "freedraw",
+        pointerDownState,
+      );
+      return;
+    }
+
+    // Auto-switch to selection when finger touches element during freedraw
+    const isFinger = !isPen; // Not pen = finger touch or mouse
+
+    if (isFinger && hitElement && this.state.activeTool.type === "freedraw") {
+      // Switch to selection tool and select the touched element
+      this.setState({
+        activeTool: { type: "selection", customType: null, locked: false },
+        selectedElementIds: makeNextSelectedElementIds(
+          { [hitElement.id]: true },
+          this.state,
+        ),
+        selectedGroupIds: {},
+        editingGroupId: null,
+        activeEmbeddable: null,
+      });
+      return;
+    }
+
     const allowOnPointerDown =
       !this.state.penMode ||
       event.pointerType !== "touch" ||
