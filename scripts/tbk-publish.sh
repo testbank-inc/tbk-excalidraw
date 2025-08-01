@@ -19,9 +19,8 @@ cd packages/excalidraw && node ../../scripts/buildPackage.js && cd ../..
 echo "🏷️ Committing changes and updating version..."
 git add .
 git commit -m "Update for publish" || echo "No changes to commit"
-npm version patch
 
-echo "🚀 Publishing to npm..."
-npm publish
+echo "🚀 Updating version and publishing to npm..."
+cd packages/excalidraw && npm version patch && npm publish && cd ../..
 
 echo "✅ Publish completed successfully!"
