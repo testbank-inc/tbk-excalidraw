@@ -7021,9 +7021,8 @@ class App extends React.Component<AppProps, AppState> {
       scenePointer.y,
     );
 
+    // Auto-switch to freedraw when clicking empty space (any input type)
     if (
-      isPen &&
-      hasSelectedElements &&
       !hitElement &&
       this.state.activeTool.type === "selection"
     ) {
