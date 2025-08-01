@@ -6580,14 +6580,23 @@ class App extends React.Component<AppProps, AppState> {
     ) {
       console.log("Page-based canvas touch handling");
       // Check if this is a finger touch vs stylus/pen
+      // Enhanced iPad Apple Pencil detection
       const isPen =
         (event.pointerType as string) === "pen" ||
-        (event.pointerType === "touch" && (event as any).pressure > 0);
+        (event.pointerType === "touch" && (event as any).pressure > 0) ||
+        // Additional iPad-specific checks
+        (event as any).touchType === "stylus" ||
+        ((event as any).altitudeAngle !== undefined &&
+          (event as any).altitudeAngle > 0);
 
       console.log("Touch analysis:", {
         isPen,
         activeTool: this.state.activeTool.type,
         gesturePointersSize: gesture.pointers.size,
+        pressure: (event as any).pressure,
+        touchType: (event as any).touchType,
+        altitudeAngle: (event as any).altitudeAngle,
+        userAgent: navigator.userAgent.includes("iPad") ? "iPad" : "Other",
       });
 
       // Check if there are selected elements
@@ -6657,10 +6666,14 @@ class App extends React.Component<AppProps, AppState> {
     ) {
       console.log("Checking stylus/pen drawing restriction");
       // Check if this is a finger touch vs stylus/pen
-      // Modern browsers differentiate: pen has pressure, touch doesn't
+      // Enhanced iPad Apple Pencil detection
       const isPen =
         (event.pointerType as string) === "pen" ||
-        (event.pointerType === "touch" && (event as any).pressure > 0);
+        (event.pointerType === "touch" && (event as any).pressure > 0) ||
+        // Additional iPad-specific checks
+        (event as any).touchType === "stylus" ||
+        ((event as any).altitudeAngle !== undefined &&
+          (event as any).altitudeAngle > 0);
 
       // Check if finger is touching an element (for tool switching)
       const hitElement = this.getElementAtPosition(
@@ -6673,18 +6686,29 @@ class App extends React.Component<AppProps, AppState> {
         gesturePointersSize: gesture.pointers.size,
         activeTool: this.state.activeTool.type,
         hitElement: hitElement?.type,
+        isImageElement: hitElement ? isImageElement(hitElement) : false,
+        pressure: (event as any).pressure,
+        touchType: (event as any).touchType,
+        altitudeAngle: (event as any).altitudeAngle,
       });
+
+      // iPad-specific: Be more permissive for image element touching
+      const isImageTouch = hitElement && isImageElement(hitElement);
+      const shouldAllowImageTouch =
+        isImageTouch && this.state.activeTool.type === "freedraw";
 
       if (
         !isPen &&
         gesture.pointers.size === 1 &&
         !isHandToolActive(this.state) &&
-        !hitElement // Allow finger touch on elements for tool switching
+        !shouldAllowImageTouch // More specific check for iPad compatibility
       ) {
-        console.log("Preventing drawing with finger touches - RETURNING EARLY");
+        console.log(
+          "Preventing drawing - but allowing image touch for tool switching",
+        );
         // Prevent drawing with finger touches - only allow stylus/pen
         // But allow multi-touch for pinch zoom and hand tool
-        // Exception: allow finger touch on elements for tool switching
+        // Exception: allow finger touch on image elements for tool switching
         event.preventDefault();
         return;
       }
@@ -6923,9 +6947,16 @@ class App extends React.Component<AppProps, AppState> {
     }
 
     // Auto-switch to freedraw when pen clicks outside selected elements
+    // Enhanced iPad Apple Pencil detection
     const isPen =
       (event.pointerType as string) === "pen" ||
-      (event.pointerType === "touch" && (event as any).pressure > 0);
+      // More specific stylus detection - avoid false positives from finger pressure
+      (event.pointerType === "touch" && 
+        ((event as any).touchType === "stylus" ||
+         ((event as any).altitudeAngle !== undefined && (event as any).altitudeAngle > 0) ||
+         // High pressure with specific stylus indicators
+         ((event as any).pressure > 0.5 && 
+          ((event as any).altitudeAngle !== undefined || (event as any).azimuthAngle !== undefined))));
 
     const hasSelectedElements =
       Object.keys(this.state.selectedElementIds).length > 0;
@@ -6962,24 +6993,51 @@ class App extends React.Component<AppProps, AppState> {
     // Auto-switch to selection when finger touches element during freedraw
     const isFinger = !isPen; // Not pen = finger touch or mouse
 
-    console.log("🔍 Touch analysis:", {
-      isFinger,
-      isPen,
-      pointerType: event.pointerType,
-      pressure: (event as any).pressure,
-      hitElement: hitElement?.type,
-      activeTool: this.state.activeTool.type,
-    });
-
-    if (isFinger && hitElement && this.state.activeTool.type === "freedraw") {
-      console.log("✅ Auto-switching to selection mode!", {
-        elementType: hitElement.type,
-        elementId: hitElement.id,
+    // iPad debugging - always log on touch
+    if (event.pointerType === "touch") {
+      console.log("🔍 iPad Touch Debug:", {
+        pointerType: event.pointerType,
+        pressure: (event as any).pressure,
+        isPen,
+        isFinger,
+        hitElement: hitElement?.type,
+        isImageElement: hitElement ? isImageElement(hitElement) : false,
+        activeTool: this.state.activeTool.type,
+        userAgent: navigator.userAgent,
+        // Additional iPad-specific checks
+        touchType: (event as any).touchType, // May exist on some browsers
+        altitudeAngle: (event as any).altitudeAngle, // Pencil specific
+        azimuthAngle: (event as any).azimuthAngle, // Pencil specific
       });
+    }
 
-      // Switch to selection tool and select the touched element
+    // Enhanced touch detection for tool switching
+    const isFingerTouch = 
+      event.pointerType === "touch" && 
+      !isPen && 
+      (event as any).touchType !== "stylus";
+
+    if (
+      isFingerTouch &&
+      hitElement &&
+      isImageElement(hitElement) && // Only for image elements
+      this.state.activeTool.type === "freedraw"
+    ) {
+      console.log("🎯 Attempting tool switch on touch!");
+
+      // Prevent the event from continuing to drawing logic
+      event.preventDefault();
+      event.stopPropagation();
+
+      // Switch to selection mode and select the image element
       this.setState({
-        activeTool: { type: "selection", customType: null, locked: false },
+        activeTool: { 
+          type: "selection", 
+          customType: null, 
+          lastActiveTool: this.state.activeTool.lastActiveTool,
+          locked: false,
+          fromSelection: false
+        },
         selectedElementIds: makeNextSelectedElementIds(
           { [hitElement.id]: true },
           this.state,
