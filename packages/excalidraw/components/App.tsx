@@ -5289,7 +5289,12 @@ class App extends React.Component<AppProps, AppState> {
       })
       .concat(iframeLikes) as NonDeleted<ExcalidrawElement>[];
 
-    return elements;
+    // Filter out freedraw elements in selection mode to prevent selection
+    const filteredElements = this.state.activeTool.type === "selection" 
+      ? elements.filter((element) => element.type !== "freedraw")
+      : elements;
+
+    return filteredElements;
   }
 
   getElementHitThreshold(element: ExcalidrawElement) {
@@ -7782,9 +7787,7 @@ class App extends React.Component<AppProps, AppState> {
             includeLockedElements: true,
           },
         );
-        // Filter out freedraw elements in selection mode to prevent selection
-        const selectableElements = allHitElements.filter((e) => e.type !== "freedraw");
-        const unlockedHitElements = selectableElements.filter((e) => !e.locked);
+        const unlockedHitElements = allHitElements.filter((e) => !e.locked);
 
         // Cannot set preferSelected in getElementAtPosition as we do in pointer move; consider:
         // A & B: both unlocked, A selected, B on top, A & B overlaps in some way
@@ -7793,7 +7796,7 @@ class App extends React.Component<AppProps, AppState> {
           pointerDownState.origin.x,
           pointerDownState.origin.y,
           {
-            allHitElements: selectableElements,
+            allHitElements,
           },
         );
 
