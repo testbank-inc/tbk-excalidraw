@@ -7034,7 +7034,7 @@ class App extends React.Component<AppProps, AppState> {
         activeTool: { 
           type: "selection", 
           customType: null, 
-          lastActiveTool: this.state.activeTool.lastActiveTool,
+          lastActiveTool: this.state.activeTool,
           locked: false,
           fromSelection: false
         },
