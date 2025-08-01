@@ -6571,10 +6571,12 @@ class App extends React.Component<AppProps, AppState> {
   private handleCanvasPointerDown = (
     event: React.PointerEvent<HTMLElement>,
   ) => {
-    console.log("handleCanvasPointerDown called:", {
+    console.log("🚀 handleCanvasPointerDown called:", {
       pointerId: event.pointerId,
       pointerType: event.pointerType,
       currentPointersSize: gesture.pointers.size,
+      activeTool: this.state.activeTool.type,
+      isEraserMode: this.state.activeTool.type === "eraser"
     });
 
     const target = event.target as HTMLElement;
@@ -6677,16 +6679,20 @@ class App extends React.Component<AppProps, AppState> {
       // 3. Single touch (not multi-touch)
       // 4. No selected elements (to allow element dragging) OR using selection tool without selected elements
       // 5. Not touching an image element (to allow image selection)
+      // 6. Not in eraser mode (to allow image selection in eraser mode)
       const isSelectionTool = this.state.activeTool.type === "selection";
+      const isEraserTool = this.state.activeTool.type === "eraser";
       const shouldAllowPanning =
-        !hasSelectedElements && !isImageTouch;
+        !hasSelectedElements && !isImageTouch && !isEraserTool;
 
       console.log("Panning decision:", {
         isSelectionTool,
+        isEraserTool,
         hasSelectedElements,
         isImageTouch,
         hitElementType: hitElement?.type,
         shouldAllowPanning,
+        activeTool: this.state.activeTool.type,
       });
 
       if (
@@ -6761,7 +6767,7 @@ class App extends React.Component<AppProps, AppState> {
       // iPad-specific: Be more permissive for image element touching
       const isImageTouch = hitElement && isImageElement(hitElement);
       const shouldAllowImageTouch =
-        isImageTouch && this.state.activeTool.type === "freedraw";
+        isImageTouch && (this.state.activeTool.type === "freedraw" || this.state.activeTool.type === "eraser");
 
       if (
         !isPen &&
@@ -6939,16 +6945,33 @@ class App extends React.Component<AppProps, AppState> {
     
     const isPenEarly =
       (event.pointerType as string) === "pen" ||
-      (event.pointerType === "touch" && 
-        ((event as any).touchType === "stylus" ||
-         ((event as any).altitudeAngle !== undefined && (event as any).altitudeAngle > 0) ||
-         ((event as any).pressure > 0.5 && 
-          ((event as any).altitudeAngle !== undefined || (event as any).azimuthAngle !== undefined))));
+      (event.pointerType === "touch" && (event as any).pressure > 0) ||
+      // Additional iPad-specific checks
+      (event as any).touchType === "stylus" ||
+      ((event as any).altitudeAngle !== undefined &&
+        (event as any).altitudeAngle > 0);
 
     const isFingerTouchEarly = 
       event.pointerType === "touch" && 
       !isPenEarly && 
       (event as any).touchType !== "stylus";
+
+    console.log("🔍 Eraser mode image touch debug:", {
+      isFingerTouchEarly,
+      isPenEarly,
+      pointerType: event.pointerType,
+      touchType: (event as any).touchType,
+      pressure: (event as any).pressure,
+      altitudeAngle: (event as any).altitudeAngle,
+      hitElementEarly: hitElementEarly?.type,
+      isImageElement: hitElementEarly ? isImageElement(hitElementEarly) : false,
+      activeTool: this.state.activeTool.type,
+      shouldTriggerImageSelection: 
+        isFingerTouchEarly &&
+        hitElementEarly &&
+        isImageElement(hitElementEarly) &&
+        (this.state.activeTool.type === "eraser" || this.state.activeTool.type === "freedraw")
+    });
 
     // Handle finger touch on image in eraser/freedraw mode
     if (
