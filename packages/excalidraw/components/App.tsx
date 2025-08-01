@@ -6579,6 +6579,32 @@ class App extends React.Component<AppProps, AppState> {
       isEraserMode: this.state.activeTool.type === "eraser"
     });
 
+    // 🖊️ Universal pen detection: Check for pen at the very beginning of ANY pointer event
+    const isPenUniversal = 
+      (event.pointerType as string) === "pen" ||
+      (event as any).touchType === "stylus" ||
+      // Very strict pressure check for iPad Apple Pencil
+      (event.pointerType === "touch" && 
+       (event as any).pressure > 0.2 && 
+       ((event as any).altitudeAngle !== undefined && (event as any).altitudeAngle > 0.2)) ||
+      // Strict backup check
+      ((event as any).altitudeAngle !== undefined && 
+       (event as any).altitudeAngle > 0.5 && 
+       (event as any).pressure > 0.05);
+
+    // If pen is detected and we're in hand mode, immediately switch back
+    if (isPenUniversal && isHandToolActive(this.state) && this.state.activeTool.lastActiveTool) {
+      console.log("🖊️ UNIVERSAL: Pen detected at pointer down - switching back from hand mode (pointers:", gesture.pointers.size, ")");
+      this.setState({
+        activeTool: {
+          ...this.state.activeTool.lastActiveTool,
+          lastActiveTool: null,
+          locked: false,
+          fromSelection: false,
+        },
+      });
+    }
+
     const target = event.target as HTMLElement;
     // capture subsequent pointer events to the canvas
     // this makes other elements non-interactive until pointer up
@@ -6654,6 +6680,20 @@ class App extends React.Component<AppProps, AppState> {
         userAgent: navigator.userAgent.includes("iPad") ? "iPad" : "Other",
       });
 
+      // 🖊️ Multi-touch pen priority: If pen is detected (regardless of pointer count) and we're in hand mode, switch back
+      if (isPen && isHandToolActive(this.state) && this.state.activeTool.lastActiveTool) {
+        console.log("🖊️ Multi-touch: Pen detected while in hand mode - switching back to original tool (pointers:", gesture.pointers.size, ")");
+        this.setState({
+          activeTool: {
+            ...this.state.activeTool.lastActiveTool,
+            lastActiveTool: null,
+            locked: false,
+            fromSelection: false,
+          },
+        });
+        // Continue with pen drawing logic
+      }
+
       // Check if there are selected elements
       const hasSelectedElements =
         Object.keys(this.state.selectedElementIds).length > 0;
@@ -6694,6 +6734,21 @@ class App extends React.Component<AppProps, AppState> {
         shouldAllowPanning,
         activeTool: this.state.activeTool.type,
       });
+
+      // 🖊️ Pen priority logic: If pen is detected and we're in hand mode, switch back to the original tool
+      if (isPen && isHandToolActive(this.state) && this.state.activeTool.lastActiveTool) {
+        console.log("🖊️ Pen detected while in hand mode - switching back to original tool");
+        this.setState({
+          activeTool: {
+            ...this.state.activeTool.lastActiveTool,
+            lastActiveTool: null,
+            locked: false,
+            fromSelection: false,
+          },
+        });
+        // Don't proceed with hand mode logic when pen is detected
+        return;
+      }
 
       if (
         !isPen &&
