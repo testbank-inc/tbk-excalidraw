@@ -598,8 +598,54 @@ class App extends React.Component<AppProps, AppState> {
    * insert to DOM before user initially scrolls to them) */
   private initializedEmbeds = new Set<ExcalidrawIframeLikeElement["id"]>();
 
+  // Palm rejection properties
+  private penActiveTimestamp: number | null = null;
+  private pinchDelayTimeout: number | null = null;
+  private readonly PEN_ACTIVE_IGNORE_DURATION = 200; // ms
+  private readonly PINCH_ACTIVATION_DELAY = 150; // ms
+
   private handleToastClose = () => {
     this.setToast(null);
+  };
+
+  // Palm rejection utility methods
+  private isPenRecentlyActive = (): boolean => {
+    if (!this.penActiveTimestamp) return false;
+    return Date.now() - this.penActiveTimestamp < this.PEN_ACTIVE_IGNORE_DURATION;
+  };
+
+  private updatePenActiveTimestamp = (): void => {
+    this.penActiveTimestamp = Date.now();
+  };
+
+  private clearPinchDelayTimeout = (): void => {
+    if (this.pinchDelayTimeout) {
+      clearTimeout(this.pinchDelayTimeout);
+      this.pinchDelayTimeout = null;
+    }
+  };
+
+  private shouldIgnorePinchGesture = (event: React.PointerEvent<HTMLCanvasElement>): boolean => {
+    // If pen was recently active, ignore pinch gestures
+    if (this.isPenRecentlyActive()) {
+      console.log("🚫 Ignoring pinch gesture - pen was recently active");
+      return true;
+    }
+
+    // If currently in freedraw mode with pen, ignore additional touches
+    if (this.state.activeTool.type === "freedraw") {
+      const isPen = (event.pointerType as string) === "pen" ||
+        (event.pointerType === "touch" && 
+          ((event as any).touchType === "stylus" ||
+           ((event as any).altitudeAngle !== undefined && (event as any).altitudeAngle > 0)));
+      
+      if (!isPen) {
+        console.log("🚫 Ignoring additional touch during freedraw mode");
+        return true;
+      }
+    }
+
+    return false;
   };
 
   private elementsPendingErasure: ElementsPendingErasure = new Set();
@@ -5869,7 +5915,8 @@ class App extends React.Component<AppProps, AppState> {
       gesture.pointers.size === 2 &&
       gesture.lastCenter &&
       initialScale &&
-      gesture.initialDistance
+      gesture.initialDistance &&
+      !this.shouldIgnorePinchGesture(event)
     ) {
       const center = getCenter(gesture.pointers);
       const deltaX = center.x - gesture.lastCenter.x;
@@ -6550,7 +6597,8 @@ class App extends React.Component<AppProps, AppState> {
       // Initialize pinch zoom immediately when second touch is detected
       if (
         gesture.pointers.size === 2 &&
-        this.state.canvasPageSettings?.enabled
+        this.state.canvasPageSettings?.enabled &&
+        !this.shouldIgnorePinchGesture(event as React.PointerEvent<HTMLCanvasElement>)
       ) {
         const pointerArray = Array.from(gesture.pointers.values());
         gesture.lastCenter = getCenter(gesture.pointers);
@@ -6958,6 +7006,11 @@ class App extends React.Component<AppProps, AppState> {
          // High pressure with specific stylus indicators
          ((event as any).pressure > 0.5 && 
           ((event as any).altitudeAngle !== undefined || (event as any).azimuthAngle !== undefined))));
+
+    // Track pen activity for palm rejection
+    if (isPen) {
+      this.updatePenActiveTimestamp();
+    }
 
     const hasSelectedElements =
       Object.keys(this.state.selectedElementIds).length > 0;
@@ -7439,7 +7492,7 @@ class App extends React.Component<AppProps, AppState> {
       pointers: Array.from(gesture.pointers.entries()),
     });
 
-    if (gesture.pointers.size === 2) {
+    if (gesture.pointers.size === 2 && !this.shouldIgnorePinchGesture(event as React.PointerEvent<HTMLCanvasElement>)) {
       const pointerArray = Array.from(gesture.pointers.values());
       gesture.lastCenter = getCenter(gesture.pointers);
       gesture.initialScale = this.state.zoom.value;
