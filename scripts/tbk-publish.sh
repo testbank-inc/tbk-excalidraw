@@ -23,4 +23,10 @@ git commit -m "Update for publish" || echo "No changes to commit"
 echo "🚀 Updating version and publishing to npm..."
 cd packages/excalidraw && npm version patch && npm publish && cd ../..
 
-echo "✅ Publish completed successfully!"
+echo "📝 Committing version bump and pushing to git..."
+NEW_VERSION=$(cd packages/excalidraw && node -p "require('./package.json').version")
+git add .
+git commit -m "v$NEW_VERSION - Version bump after publish"
+git push
+
+echo "✅ Publish and git push completed successfully!"
