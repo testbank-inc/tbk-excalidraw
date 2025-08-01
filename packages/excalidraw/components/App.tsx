@@ -6961,9 +6961,10 @@ class App extends React.Component<AppProps, AppState> {
     const hasSelectedElements =
       Object.keys(this.state.selectedElementIds).length > 0;
 
+    const scenePointer = viewportCoordsToSceneCoords(event, this.state);
     const hitElement = this.getElementAtPosition(
-      pointerDownState.origin.x,
-      pointerDownState.origin.y,
+      scenePointer.x,
+      scenePointer.y,
     );
 
     if (
@@ -6974,7 +6975,13 @@ class App extends React.Component<AppProps, AppState> {
     ) {
       // Switch to freedraw tool and start drawing immediately
       this.setState({
-        activeTool: { type: "freedraw", customType: null, locked: false },
+        activeTool: { 
+          type: "freedraw", 
+          customType: null, 
+          lastActiveTool: this.state.activeTool,
+          locked: false,
+          fromSelection: false
+        },
         selectedElementIds: makeNextSelectedElementIds({}, this.state),
         selectedGroupIds: {},
         editingGroupId: null,
