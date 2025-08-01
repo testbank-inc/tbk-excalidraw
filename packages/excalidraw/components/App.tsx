@@ -6676,9 +6676,10 @@ class App extends React.Component<AppProps, AppState> {
           (event as any).altitudeAngle > 0);
 
       // Check if finger is touching an element (for tool switching)
+      const scenePointerForElementCheck = viewportCoordsToSceneCoords(event, this.state);
       const hitElement = this.getElementAtPosition(
-        pointerDownState.origin.x,
-        pointerDownState.origin.y,
+        scenePointerForElementCheck.x,
+        scenePointerForElementCheck.y,
       );
 
       console.log("Drawing restriction check:", {
