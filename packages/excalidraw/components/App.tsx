@@ -6662,18 +6662,30 @@ class App extends React.Component<AppProps, AppState> {
         activeTool: this.state.activeTool.type,
       });
 
+      // Check if finger is touching an element (especially images)
+      const scenePointerForElementCheck = viewportCoordsToSceneCoords(event, this.state);
+      const hitElement = this.getElementAtPosition(
+        scenePointerForElementCheck.x,
+        scenePointerForElementCheck.y,
+      );
+      
+      const isImageTouch = hitElement && isImageElement(hitElement);
+
       // Only switch to hand tool for single finger touch if:
       // 1. Not a pen
       // 2. Not already hand tool
       // 3. Single touch (not multi-touch)
       // 4. No selected elements (to allow element dragging) OR using selection tool without selected elements
+      // 5. Not touching an image element (to allow image selection)
       const isSelectionTool = this.state.activeTool.type === "selection";
       const shouldAllowPanning =
-        !hasSelectedElements || (isSelectionTool && !hasSelectedElements);
+        !hasSelectedElements && !isImageTouch;
 
       console.log("Panning decision:", {
         isSelectionTool,
         hasSelectedElements,
+        isImageTouch,
+        hitElementType: hitElement?.type,
         shouldAllowPanning,
       });
 
@@ -6918,6 +6930,58 @@ class App extends React.Component<AppProps, AppState> {
     });
     this.savePointer(event.clientX, event.clientY, "down");
 
+    // Check for finger touch on image in eraser mode before eraser logic
+    const scenePointerEarly = viewportCoordsToSceneCoords(event, this.state);
+    const hitElementEarly = this.getElementAtPosition(
+      scenePointerEarly.x,
+      scenePointerEarly.y,
+    );
+    
+    const isPenEarly =
+      (event.pointerType as string) === "pen" ||
+      (event.pointerType === "touch" && 
+        ((event as any).touchType === "stylus" ||
+         ((event as any).altitudeAngle !== undefined && (event as any).altitudeAngle > 0) ||
+         ((event as any).pressure > 0.5 && 
+          ((event as any).altitudeAngle !== undefined || (event as any).azimuthAngle !== undefined))));
+
+    const isFingerTouchEarly = 
+      event.pointerType === "touch" && 
+      !isPenEarly && 
+      (event as any).touchType !== "stylus";
+
+    // Handle finger touch on image in eraser/freedraw mode
+    if (
+      isFingerTouchEarly &&
+      hitElementEarly &&
+      isImageElement(hitElementEarly) &&
+      (this.state.activeTool.type === "eraser" || this.state.activeTool.type === "freedraw")
+    ) {
+      console.log("🎯 Finger touch on image, switching to selection permanently!");
+      
+      event.preventDefault();
+      event.stopPropagation();
+
+      this.setState({
+        activeTool: { 
+          type: "selection", 
+          customType: null, 
+          // Remove lastActiveTool to prevent reverting back
+          lastActiveTool: null,
+          locked: false,
+          fromSelection: false
+        },
+        selectedElementIds: makeNextSelectedElementIds({ [hitElementEarly.id]: true }, this.state),
+        selectedGroupIds: {},
+        editingGroupId: null,
+        activeEmbeddable: null,
+        resizingElement: null,
+        multiElement: null,
+        editingLinearElement: null,
+      });
+      return;
+    }
+
     if (
       event.button === POINTER_BUTTON.ERASER &&
       this.state.activeTool.type !== TOOL_TYPE.eraser
@@ -7021,14 +7085,23 @@ class App extends React.Component<AppProps, AppState> {
       Object.keys(this.state.selectedElementIds).length > 0;
 
     const scenePointer = viewportCoordsToSceneCoords(event, this.state);
+    // For determining if we hit an element (to avoid switching to freedraw), 
+    // we need to check all elements including freedraw
     const hitElement = this.getElementAtPosition(
       scenePointer.x,
       scenePointer.y,
     );
+    
+    // For checking if we hit a non-freedraw element, get all elements without filtering
+    const allElements = this.scene.getNonDeletedElements();
+    const hitAnyElement = allElements.find(el => 
+      this.hitElement(scenePointer.x, scenePointer.y, el)
+    );
 
     // Auto-switch to freedraw when clicking empty space (any input type)
+    // Use hitAnyElement to check for truly empty space (including freedraw)
     if (
-      !hitElement &&
+      !hitAnyElement &&
       this.state.activeTool.type === "selection"
     ) {
       // Switch to freedraw tool and start drawing immediately
@@ -7082,37 +7155,8 @@ class App extends React.Component<AppProps, AppState> {
       !isPen && 
       (event as any).touchType !== "stylus";
 
-    if (
-      isFingerTouch &&
-      hitElement &&
-      isImageElement(hitElement) && // Only for image elements
-      this.state.activeTool.type === "freedraw"
-    ) {
-      console.log("🎯 Attempting tool switch on touch!");
-
-      // Prevent the event from continuing to drawing logic
-      event.preventDefault();
-      event.stopPropagation();
-
-      // Switch to selection mode and select the image element
-      this.setState({
-        activeTool: { 
-          type: "selection", 
-          customType: null, 
-          lastActiveTool: this.state.activeTool,
-          locked: false,
-          fromSelection: false
-        },
-        selectedElementIds: makeNextSelectedElementIds(
-          { [hitElement.id]: true },
-          this.state,
-        ),
-        selectedGroupIds: {},
-        editingGroupId: null,
-        activeEmbeddable: null,
-      });
-      return;
-    }
+    // This logic has been moved to the earlier stage (before eraser/pen handling)
+    // to prevent conflicts. See the early finger touch handling above.
 
     const allowOnPointerDown =
       !this.state.penMode ||
