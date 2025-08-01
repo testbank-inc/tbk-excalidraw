@@ -15,6 +15,10 @@ export default defineConfig(({ mode }) => {
   return {
     server: {
       port: Number(envVars.VITE_APP_PORT || 3000),
+      // Allow external connections (for iPad access)
+      host: '0.0.0.0',
+      // Enable HTTPS for better touch/gesture support on iPad
+      https: envVars.VITE_HTTPS === 'true',
       // open the browser
       open: true,
     },
